@@ -27,14 +27,16 @@
         IA.sstore.set('ia-intro', '1');
         if (IA.lenis) IA.lenis.stop();
         var line = $('.intro__line', intro), sky = $('.intro__sky', intro), sun = $('.intro__sun', intro), word = $('.intro__word', intro);
-        tl.to(line, { scaleX: 1, duration: 0.8 }, 0.05)
-          .to(sky, { opacity: 1, duration: 1.3, ease: 'power2.inOut' }, 0.3)
-          .to(sun, { opacity: 1, yPercent: -60, duration: 1.5, ease: 'power3.out' }, 0.35)
-          .to(word, { opacity: 1, y: '-12vh', duration: 1.1, ease: 'expo.out' }, 0.55)
-          .to(intro, { clipPath: 'inset(0 0 100% 0)', duration: 1.0, ease: 'expo.inOut' }, 1.55)
-          .add(function () { if (IA.lenis) IA.lenis.start(); intro.remove(); }, 2.6);
-        revealHero(tl, 1.95);
-        var skip = function () { if (tl.progress() < 0.6) tl.progress(1); };
+        tl.to(line, { scaleX: 1, duration: 0.6 }, 0.05)
+          .to(sky, { opacity: 1, duration: 0.9, ease: 'power2.inOut' }, 0.2)
+          .to(sun, { opacity: 1, yPercent: -60, duration: 1.1, ease: 'power3.out' }, 0.22)
+          .to(word, { opacity: 1, y: '-12vh', duration: 0.8, ease: 'expo.out' }, 0.35)
+          .to(intro, { clipPath: 'inset(0 0 100% 0)', duration: 0.85, ease: 'expo.inOut' }, 1.05)
+          .add(function () { if (IA.lenis) IA.lenis.start(); intro.remove(); }, 1.95);
+        revealHero(tl, 1.3);
+        var skip = function () { if (tl.progress() < 0.75) tl.progress(1); };
+        var sk = $('[data-intro-skip]', intro);
+        if (sk) { sk.addEventListener('click', skip); W.setTimeout(function () { try { sk.focus({ preventScroll: true }); } catch (e) { } }, 50); }
         W.addEventListener('pointerdown', skip, { once: true });
         W.addEventListener('keydown', skip, { once: true });
       } else {
@@ -66,9 +68,11 @@
     var piste = $('[data-piste]'), mapBox = $('[data-map="piste"]');
     if (piste && mapBox && IA.NamMap) {
       var map = new IA.NamMap(mapBox);
-      var days = DATA.grandeAventure;
-      var ids = ['windhoek'].concat(days.map(function (d) { return d.stop; }));
+      var days = DATA.fiches['grande-aventure'].days;
+      var ids = ['windhoek'];
+      days.forEach(function (d) { if (d.via) ids.push(d.via); ids.push(d.stop); (d.after || []).forEach(function (a) { ids.push(a); }); });
       var route = map.addRoute(ids, { ghost: true });
+      if (hasG && !IA.calm) map.car(route);
       map.addStops(route.ids, { labels: ['windhoek'], right: ['divundu'], above: ['divundu', 'halali'], below: ['mahango', 'walvisbay', 'okaukuejo'] });
       var dayIdx = [], k = 0;
       days.forEach(function (d) { var i = route.indexOf(d.stop, k); if (i < 0) i = k; dayIdx.push(i); k = i; });
@@ -80,10 +84,12 @@
         var f = Math.max(0, Math.min(1, dv - i));
         var L0 = route.lengthAt(i === 0 ? 0 : dayIdx[i - 1]), L1 = route.lengthAt(dayIdx[i]);
         route.set(L0 + (L1 - L0) * Math.min(1, f * 1.4));
+        map.fauna(f * 1.4 >= 1 || i === 0 ? days[i].stop : null);
         if (i === lastDay) return;
         lastDay = i;
         var d = days[i];
         bigDay.textContent = (d.j < 10 ? '0' : '') + d.j;
+        IA.onPisteDay && IA.onPisteDay(d, map, route);
         dayStop.textContent = d.t;
         dayPlace.textContent = DATA.places[d.stop].n;
         var visited = route.ids.slice(0, dayIdx[i] + 1);
@@ -117,6 +123,13 @@
         var dist = function () { return Math.max(0, track.scrollWidth - W.innerWidth); };
         var tween = gsap.to(track, { x: function () { return -dist(); }, ease: 'none',
           scrollTrigger: { trigger: trips, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: 0.8, invalidateOnRefresh: true, anticipatePin: 1 } });
+        track.addEventListener('focusin', function (e) {
+          var card = e.target.closest('.trip, .trips__intro'); if (!card) return;
+          var st = tween.scrollTrigger, d = dist(); if (!st || !d) return;
+          var p = Math.max(0, Math.min(1, (card.offsetLeft - W.innerWidth * 0.25) / d));
+          var y = st.start + p * (st.end - st.start);
+          if (IA.lenis) IA.lenis.scrollTo(y, { immediate: true }); else W.scrollTo(0, y);
+        });
         stamps.forEach(function (st) {
           gsap.set(st, { opacity: 0 });
           ScrollTrigger.create({ trigger: st.closest('.trip'), containerAnimation: tween, start: 'left 70%', once: true, onEnter: function () { stampIn(st); } });

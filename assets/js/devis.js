@@ -8,6 +8,41 @@
   var prev = $('[data-prev]', dv), next = $('[data-next]', dv);
   var fill = $('.road__fill', dv), car = $('.road__car', dv), marks = $$('[data-road]', dv);
   var voy = $('#d-voy'), lastFocus = null, step = 0, nbVoy = 4;
+  var DATA = window.IA_DATA, CBYNAME = {}, CBYID = {};
+  DATA.circuits.forEach(function (c) { CBYNAME[c.name] = c; CBYID[c.id] = c; });
+  var DRAFT = 'ia-devis-brouillon';
+  var card = $('[data-devis-card]', dv), lbox = $('[data-devis-liste-box]', dv), litems = $('[data-devis-liste-items]', dv);
+  function renderCard() {
+    var c = CBYNAME[$('#d-tour').value];
+    if (!c) { card.hidden = true; return; }
+    card.hidden = false;
+    card.innerHTML = '<img src="assets/img/' + c.img + '-640.webp" alt="">' +
+      '<div><b>' + c.name + '</b><span>' + c.nuitsLabel + ' · ' + IA.euro(c.prix) + ' TTC par personne, base ' + c.base + '</span>' +
+      '<span>' + (c.formule === 'confirme' ? 'Départ ' + c.departLabel + (c.statut === 'complet' ? ' · complet, nous vous proposons une autre date' : '') : (c.periode || 'Dates à définir avec vous')) + '</span></div>';
+  }
+  function renderListe(checkAll) {
+    var favs = IA.favs ? IA.favs() : [];
+    lbox.hidden = !favs.length;
+    litems.innerHTML = favs.map(function (id) {
+      var c = CBYID[id];
+      return '<label class="check"><input type="checkbox" name="liste" value="' + c.name + '"' + (checkAll !== false ? ' checked' : '') + '><span>' + c.name + ' · ' + IA.euro(c.prix) + '</span></label>';
+    }).join('');
+  }
+  function saveDraft() {
+    var fd = new FormData(form), o = {};
+    ['formule', 'tour', 'periode', 'nom', 'email', 'tel', 'message'].forEach(function (k) { o[k] = fd.get(k) || ''; });
+    o.voyageurs = nbVoy; o.whatsapp = $('#d-wa').checked;
+    IA.store.set(DRAFT, JSON.stringify(o));
+  }
+  function loadDraft() {
+    var o; try { o = JSON.parse(IA.store.get(DRAFT) || 'null'); } catch (e) { o = null; }
+    if (!o) return;
+    ['nom', 'email', 'tel', 'message'].forEach(function (k) { var el = form.elements[k]; if (el && !el.value && o[k]) el.value = o[k]; });
+    if (o.voyageurs) { nbVoy = o.voyageurs; voy.value = voy.textContent = String(nbVoy); }
+    if (o.whatsapp) $('#d-wa').checked = true;
+  }
+  form.addEventListener('input', saveDraft);
+  form.addEventListener('change', function (e) { saveDraft(); if (e.target.id === 'd-tour') renderCard(); });
 
   function show(n) {
     step = n;
@@ -45,10 +80,19 @@
       if (!ok) { var op = D.createElement('option'); op.textContent = periode; ps.insertBefore(op, ps.firstChild); }
       ps.value = periode;
     }
+    loadDraft();
+    renderListe();
+    if (trigger && trigger.hasAttribute('data-devis-liste')) {
+      var favs = IA.favs ? IA.favs() : [];
+      if (favs.length) { var sel0 = $('#d-tour'); sel0.value = CBYID[favs[0]].name; }
+      $$('input[name="formule"]', dv).forEach(function (r) { r.checked = r.value === 'Sur mesure, à définir'; });
+    }
+    renderCard();
     show(0);
     dv.classList.add('is-open'); dv.setAttribute('aria-hidden', 'false');
     if (IA.lenis) IA.lenis.stop();
     D.documentElement.style.overflow = 'hidden';
+    D.documentElement.classList.add('devis-open');
     IA.closeMenu && IA.closeMenu();
     window.setTimeout(function () { var c = $('input[name="formule"]:checked', dv); (c || panel).focus({ preventScroll: true }); }, 60);
   }
@@ -56,6 +100,7 @@
     dv.classList.remove('is-open'); dv.setAttribute('aria-hidden', 'true');
     if (IA.lenis) IA.lenis.start();
     D.documentElement.style.overflow = '';
+    D.documentElement.classList.remove('devis-open');
     if (step === 4) { form.reset(); nbVoy = 4; voy.value = voy.textContent = '4'; }
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   }
@@ -106,6 +151,9 @@
       ['Voyageurs', nbVoy + (nbVoy > 1 ? ' personnes' : ' personne')], ['Nom', fd.get('nom')], ['E-mail', fd.get('email')]
     ];
     if (fd.get('tel')) rows.push(['Téléphone', fd.get('tel')]);
+    var liste = fd.getAll('liste');
+    if (liste.length) rows.push(['Ma liste d’envies', liste.join(' · ')]);
+    if ($('#d-wa').checked) rows.push(['Rappel', 'Sur WhatsApp, de préférence']);
     if (fd.get('message')) rows.push(['Message', fd.get('message')]);
     $('[data-recap]', dv).innerHTML = rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('');
   }
@@ -113,6 +161,12 @@
     if (step === 2 && !validContact()) return;
     if (step === 2) recap();
     show(step + 1);
+    if (step === 4) {
+      IA.store.set(DRAFT, '');
+      var st = $('[data-done-stamp]', dv);
+      if (st && window.gsap && !IA.calm) gsap.fromTo(st, { scale: 2.6, opacity: 0, rotation: -28 }, { scale: 1, opacity: 1, rotation: -8, duration: 0.8, ease: 'back.out(2.4)', delay: 0.15 });
+      if (window.gsap && !IA.calm) gsap.from($$('.nexts li', dv), { x: 20, opacity: 0, stagger: 0.1, duration: 0.7, delay: 0.5 });
+    }
   });
   prev.addEventListener('click', function () { show(Math.max(0, step - 1)); });
   form.addEventListener('submit', function (e) { e.preventDefault(); });

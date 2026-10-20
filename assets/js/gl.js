@@ -31,6 +31,9 @@
     '  vec3 dawn = col * mix(vec3(1.12, 0.84, 0.74), vec3(1.0), smoothstep(0.45, 1.0, uReveal));',
     '  col = mix(night, dawn, smoothstep(0.0, 0.8, uReveal));',
     '  col += vec3(0.95, 0.45, 0.2) * 0.1 * max(0.0, 1.0 - abs(uReveal - 0.55) * 2.4) * smoothstep(0.25, 0.7, vUv.y);',
+    '  float sx = 0.12 + uScroll * 0.75 + 0.04 * sin(uTime * 0.21);',
+    '  float sweep = smoothstep(0.2, 0.0, abs(vUv.x - sx + (vUv.y - 0.5) * 0.45));',
+    '  col += vec3(1.0, 0.62, 0.3) * 0.11 * sweep * smoothstep(0.3, 0.9, uReveal) * (0.6 + 0.4 * vUv.y);',
     '  vec2 q = vUv - 0.5; col *= 1.0 - dot(q, q) * 0.32;',
     '  gl_FragColor = vec4(col, 1.0);',
     '}'
@@ -57,6 +60,7 @@
     gl.canvas.setAttribute('aria-hidden', 'true');
 
     var ready = false, visible = true, raf = 0, t0 = performance.now(), target = { x: 0.5, y: 0.5, amt: 0 }, lastMove = 0;
+    var probe = { n: 0, t: 0, prev: 0, stage: 0 }, dead = false;
     function load() {
       var im = new Image();
       im.decoding = 'async';
@@ -83,6 +87,11 @@
       target.x = (e.clientX - r.left) / r.width; target.y = 1 - (e.clientY - r.top) / r.height; target.amt = 1; lastMove = performance.now();
     }, { passive: true });
     host.addEventListener('pointerleave', function () { target.amt = 0; });
+    var fine = W.matchMedia && W.matchMedia('(hover: hover)').matches, lastY = W.pageYOffset;
+    if (!fine) W.addEventListener('scroll', function () {
+      var y = W.pageYOffset, v = Math.abs(y - lastY); lastY = y;
+      target.amt = Math.min(1, v / 30); target.x = 0.5 + 0.25 * Math.sin(performance.now() / 900); target.y = 0.32; lastMove = performance.now();
+    }, { passive: true });
 
     function frame(now) {
       raf = 0;
@@ -93,15 +102,29 @@
       U.uMouseAmt.value += (target.amt - U.uMouseAmt.value) * 0.05;
       var hh = box.offsetHeight || 1;
       U.uScroll.value = Math.max(0, Math.min(1, W.pageYOffset / hh));
-      if (ready) renderer.render({ scene: mesh });
+      if (ready) {
+        renderer.render({ scene: mesh });
+        /* Qualité adaptative : si l'appareil peine, on baisse la définition, puis on garde la photo seule */
+        if (probe.stage < 2) {
+          if (probe.prev) { probe.t += now - probe.prev; probe.n++; }
+          probe.prev = now;
+          if (probe.n >= 45) {
+            var avg = probe.t / probe.n;
+            if (avg > 34 && probe.stage === 0) { renderer.dpr = 0.6; resize(); probe = { n: 0, t: 0, prev: 0, stage: 1 }; }
+            else if (avg > 34 && probe.stage === 1) { dead = true; IA.lite && IA.lite(); box.classList.remove('gl-ready'); gl.canvas.remove(); return; }
+            else probe.stage = 2;
+          }
+        }
+      }
+      if (dead) return;
       raf = W.requestAnimationFrame(frame);
     }
     var D = document;
     if ('IntersectionObserver' in W) new IntersectionObserver(function (es) {
-      visible = es[0].isIntersecting;
+      visible = es[0].isIntersecting && !dead; probe.prev = 0;
       if (visible && !raf) raf = W.requestAnimationFrame(frame);
     }).observe(box);
-    D.addEventListener('visibilitychange', function () { if (!D.hidden && visible && !raf) raf = W.requestAnimationFrame(frame); });
+    D.addEventListener('visibilitychange', function () { probe.prev = 0; if (!D.hidden && visible && !raf) raf = W.requestAnimationFrame(frame); });
     raf = W.requestAnimationFrame(frame);
     gl.canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); box.classList.remove('gl-ready'); ready = false; });
     return { uniforms: U, canvas: gl.canvas };

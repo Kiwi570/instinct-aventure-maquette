@@ -54,7 +54,77 @@
     });
     this.routeLayer = el('g', {}, svg);
     this.stopLayer = el('g', {}, svg);
+    this.carLayer = el('g', { 'class': 'm-carlayer' }, svg);
+    this.faunaLayer = el('g', { 'class': 'm-fauna' }, svg);
   }
+
+  /* ---- Le 4x4 qui roule sur la trace, avec sa poussière ---- */
+  NamMap.prototype.car = function (route) {
+    this.carRoute = route;
+    if (!this.carG) {
+      var g = this.carG = el('g', { 'class': 'm-car', opacity: 0 }, this.carLayer);
+      var b = this.carBody = el('g', {}, g);
+      [[-8, -7.6], [4, -7.6], [-8, 5], [4, 5]].forEach(function (w) { el('rect', { x: w[0], y: w[1], width: 5, height: 2.6, rx: 1, 'class': 'm-car__wheel' }, b); });
+      el('rect', { x: -11, y: -6, width: 22, height: 12, rx: 3.4, 'class': 'm-car__body' }, b);
+      el('rect', { x: -9, y: -4.4, width: 9.5, height: 8.8, rx: 1.4, 'class': 'm-car__tent' }, b);
+      el('rect', { x: 2.6, y: -4.6, width: 4, height: 9.2, rx: 1.2, 'class': 'm-car__glass' }, b);
+      this.dustG = el('g', { 'class': 'm-dust' }, this.carLayer);
+      this.carLayer.insertBefore(this.dustG, g);
+    }
+    this.lastDust = null;
+    this.moveCar(route.cur);
+    return this;
+  };
+  NamMap.prototype.moveCar = function (L) {
+    var r = this.carRoute, g = this.carG; if (!r || !g) return;
+    if (L <= 0.5) { g.setAttribute('opacity', 0); return; }
+    var p = r.path.getPointAtLength(Math.min(L, r.total)), q = r.path.getPointAtLength(Math.max(0, Math.min(L, r.total) - 6));
+    var a = Math.atan2(p.y - q.y, p.x - q.x) * 180 / Math.PI, k = this.vb.w / this.W;
+    g.setAttribute('opacity', 1);
+    g.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + a.toFixed(1) + ') scale(' + (k * 1.15).toFixed(3) + ')');
+    if (IA.calm) return;
+    var ld = this.lastDust;
+    if (!ld || Math.abs(L - ld.L) > 9 * k) {
+      this.lastDust = { L: L };
+      var rad = a * Math.PI / 180, bx = p.x - Math.cos(rad) * 12 * k, by = p.y - Math.sin(rad) * 12 * k;
+      var d = el('circle', { cx: bx.toFixed(1), cy: by.toFixed(1), r: (3 + Math.random() * 2.5) * k, 'class': 'm-puff' }, this.dustG);
+      d.style.setProperty('--dx', ((Math.random() - 0.5) * 14 * k).toFixed(1) + 'px');
+      d.style.setProperty('--dy', ((Math.random() - 0.5) * 14 * k - 4 * k).toFixed(1) + 'px');
+      setTimeout(function () { d.remove(); }, 1300);
+      while (this.dustG.childNodes.length > 26) this.dustG.removeChild(this.dustG.firstChild);
+    }
+  };
+
+  /* ---- La faune croisée aux étapes : photos d'Instinct Aventure ---- */
+  var FAUNA = [
+    { n: 'Lions', src: 'assets/img/faune-lion-192.webp', at: ['okaukuejo', 'halali', 'namutoni', 'onguma'] },
+    { n: 'Hippopotames', src: 'assets/img/faune-hippo-192.webp', at: ['divundu', 'mahango', 'rundu', 'guma'] },
+    { n: 'Otaries', src: 'assets/img/faune-otarie-192.webp', at: ['swakopmund', 'walvisbay'] },
+    { n: 'Oryx', src: 'assets/img/faune-oryx-192.webp', at: ['sesriem', 'sossusvlei', 'solitaire'] },
+    { n: 'Éléphants', src: 'assets/img/faune-elephant-192.webp', at: ['palmwag', 'twyfelfontein'] },
+    { n: 'Guépards', src: 'assets/img/faune-guepard-192.webp', at: ['ccf'] }
+  ];
+  IA.faunaAt = function (id) { for (var i = 0; i < FAUNA.length; i++) if (FAUNA[i].at.indexOf(id) >= 0) return FAUNA[i]; return null; };
+  NamMap.prototype.fauna = function (stopId) {
+    var f = stopId ? IA.faunaAt(stopId) : null, key = f ? f.n + stopId : '';
+    if (key === this.faunaKey) return;
+    this.faunaKey = key;
+    var old = this.faunaLayer.querySelectorAll('.m-bubble');
+    for (var i = 0; i < old.length; i++) { var o = old[i]; o.classList.remove('is-on'); (function (n) { setTimeout(function () { n.remove(); }, 450); })(o); }
+    if (!f || !P[stopId]) return;
+    var q = pt(stopId), k = this.vb.w / this.W, left = P[stopId].lon > 20.5;
+    var cid = 'fb' + (++uid);
+    var outer = el('g', { 'class': 'm-bubble', transform: 'translate(' + q[0].toFixed(1) + ' ' + q[1].toFixed(1) + ') scale(' + k.toFixed(3) + ')' }, this.faunaLayer);
+    var g = el('g', { 'class': 'm-bubble__in', style: 'transform-origin:' + (left ? '100% 100%' : '0% 100%') }, outer);
+    var cx = left ? -46 : 46, cy = -50;
+    el('path', { d: 'M0 -6 L' + (cx * 0.55) + ' ' + (cy + 30) + ' L' + (cx * 0.85) + ' ' + (cy + 22) + ' Z', 'class': 'm-bubble__tail' }, g);
+    var cp = el('clipPath', { id: cid }, this.defs); el('circle', { cx: cx, cy: cy, r: 31 }, cp);
+    el('circle', { cx: cx, cy: cy, r: 35, 'class': 'm-bubble__ring' }, g);
+    var im = el('image', { x: cx - 31, y: cy - 31, width: 62, height: 62, 'clip-path': 'url(#' + cid + ')', preserveAspectRatio: 'xMidYMid slice' }, g);
+    im.setAttributeNS('http://www.w3.org/1999/xlink', 'href', f.src); im.setAttribute('href', f.src);
+    var t = el('text', { x: cx, y: cy - 42, 'text-anchor': 'middle', 'class': 'm-bubble__t' }, g); t.textContent = f.n;
+    requestAnimationFrame(function () { requestAnimationFrame(function () { outer.classList.add('is-on'); }); });
+  };
 
   NamMap.prototype.addRoute = function (ids, o) {
     o = o || {};
@@ -73,9 +143,10 @@
     for (var i = 0; i < s.length; i++) { acc += s[i]; tmp.setAttribute('d', acc); lens.push(tmp.getTotalLength()); }
     tmp.remove();
     mp.style.strokeDasharray = (total + 40) + ' ' + (total + 40);
+    var self = this;
     var r = {
-      ids: ids, pts: pts, total: total, lens: lens, cur: 0, g: g,
-      set: function (L) { r.cur = L; mp.style.strokeDashoffset = Math.max(0, total + 40 - L - (L >= total ? 40 : 0)); },
+      ids: ids, pts: pts, total: total, lens: lens, cur: 0, g: g, path: mp,
+      set: function (L) { r.cur = L; mp.style.strokeDashoffset = Math.max(0, total + 40 - L - (L >= total ? 40 : 0)); if (self.carRoute === r) self.moveCar(L); },
       progress: function (p) { r.set(total * p); },
       lengthAt: function (idx) { return lens[Math.max(0, Math.min(lens.length - 1, idx))]; },
       indexOf: function (stopId, from) { for (var i = from || 0; i < ids.length; i++) if (ids[i] === stopId) return i; return -1; }
@@ -135,6 +206,9 @@
     }
     var lk = this.vb.w / this.W;
     this.labels.style.opacity = lk < 0.75 ? 0 : 1;
+    var bs = this.faunaLayer ? this.faunaLayer.querySelectorAll('.m-bubble') : [];
+    for (var b = 0; b < bs.length; b++) bs[b].setAttribute('transform', bs[b].getAttribute('transform').replace(/scale\([^)]*\)/, 'scale(' + lk.toFixed(3) + ')'));
+    if (this.carRoute) this.moveCar(this.carRoute.cur);
   };
 
   NamMap.prototype.applyVB = function () {
@@ -156,6 +230,26 @@
     gsap.to(this.vb, { x: to.x, y: to.y, w: to.w, h: to.h, duration: dur == null ? 1.4 : dur, ease: 'power3.inOut', overwrite: true, onUpdate: function () { self.applyVB(); } });
   };
 
+  NamMap.prototype.clear = function () {
+    while (this.routeLayer.firstChild) this.routeLayer.removeChild(this.routeLayer.firstChild);
+    while (this.stopLayer.firstChild) this.stopLayer.removeChild(this.stopLayer.firstChild);
+    while (this.faunaLayer.firstChild) this.faunaLayer.removeChild(this.faunaLayer.firstChild);
+    if (this.carG) { this.carG.setAttribute('opacity', 0); this.carRoute = null; }
+    this.faunaKey = '';
+    var m = this.defs.querySelectorAll('mask'); for (var i = 0; i < m.length; i++) m[i].remove();
+    this.stops = {};
+  };
+
   IA.NamMap = NamMap;
   IA.proj = proj;
+  /* Étapes d'un programme jour par jour, avec les passages (via) et les détours (after) */
+  IA.routeOf = function (days) {
+    var ids = ['windhoek'], idx = [];
+    days.forEach(function (d) {
+      if (d.via) ids.push(d.via);
+      ids.push(d.stop); idx.push(ids.length - 1);
+      (d.after || []).forEach(function (a) { ids.push(a); });
+    });
+    return { ids: ids, idx: idx };
+  };
 })();

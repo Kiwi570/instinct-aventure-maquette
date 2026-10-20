@@ -20,6 +20,9 @@
   IA.fine = W.matchMedia('(pointer: fine)').matches && W.matchMedia('(hover: hover)').matches;
   IA.desktop = function () { return W.innerWidth > 1100; };
   IA.hasGSAP = !!(W.gsap && W.ScrollTrigger);
+  /* Mode allégé, activé quand l'appareil peine à suivre (voir gl.js) */
+  IA.isLite = false;
+  IA.lite = function () { if (IA.isLite) return; IA.isLite = true; H.classList.add('is-lite'); };
   IA.fmt = function (n, dec) { return Number(n).toLocaleString('fr-FR', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }).replace(/ /g, ' '); };
   IA.euro = function (n) { return IA.fmt(Math.round(n)) + ' €'; };
 
@@ -103,22 +106,55 @@
 
   /* ---------- Menu mobile ---------- */
   var menu = $('#menu'), burger = $('[data-menu]');
-  function closeMenu() {
+  function closeMenu(restore) {
     if (!menu || !menu.classList.contains('is-open')) return;
     menu.classList.remove('is-open'); menu.setAttribute('aria-hidden', 'true');
     D.body.classList.remove('menu-open'); burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Ouvrir le menu');
     if (lenis) lenis.start();
+    if (restore) burger.focus();
   }
   IA.closeMenu = closeMenu;
   if (burger) burger.addEventListener('click', function () {
     var open = !menu.classList.contains('is-open');
-    if (!open) return closeMenu();
+    if (!open) return closeMenu(true);
     menu.classList.add('is-open'); menu.setAttribute('aria-hidden', 'false');
     D.body.classList.add('menu-open'); burger.setAttribute('aria-expanded', 'true');
+    burger.setAttribute('aria-label', 'Fermer le menu');
     if (lenis) lenis.stop();
+    W.setTimeout(function () { var first = $('nav a', menu); if (first) first.focus({ preventScroll: true }); }, 80);
     if (IA.hasGSAP && !IA.calm) gsap.from($$('nav a', menu), { yPercent: 60, opacity: 0, stagger: 0.05, duration: 0.9, delay: 0.15 });
   });
   if (menu) menu.addEventListener('click', function (e) { if (e.target.closest('a')) closeMenu(); });
+  D.addEventListener('keydown', function (e) {
+    if (!menu || !menu.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeMenu(true); return; }
+    if (e.key === 'Tab') {
+      var f = [burger].concat($$('a, button', menu)).filter(function (el) { return el.offsetParent !== null || el === burger; });
+      var i = f.indexOf(D.activeElement);
+      if (e.shiftKey && (i <= 0)) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+
+  /* ---------- Annonces pour lecteurs d'écran ---------- */
+  var live = D.createElement('div');
+  live.className = 'sr-only'; live.setAttribute('aria-live', 'polite'); live.setAttribute('role', 'status');
+  D.body.appendChild(live);
+  IA.announce = function (msg) { live.textContent = ''; W.setTimeout(function () { live.textContent = msg; }, 60); };
+
+  /* ---------- Barre d'action mobile ---------- */
+  var bar = $('[data-actionbar]');
+  if (bar) {
+    var heroEl = $('[data-hero]'), nightEl = $('.nuit'), barState = { pastHero: false, night: false };
+    var setBar = function () { bar.classList.toggle('is-on', barState.pastHero && !barState.night && !D.body.classList.contains('menu-open')); };
+    if ('IntersectionObserver' in W) {
+      if (heroEl) new IntersectionObserver(function (es) { barState.pastHero = !es[0].isIntersecting; setBar(); }, { rootMargin: '-40% 0px 0px 0px' }).observe(heroEl);
+      else barState.pastHero = true;
+      if (nightEl) new IntersectionObserver(function (es) { barState.night = es[0].isIntersecting; setBar(); }, { rootMargin: '0px 0px -30% 0px' }).observe(nightEl);
+    } else bar.classList.add('is-on');
+    IA.setBar = setBar;
+  }
 
   /* ---------- Heure de Windhoek ---------- */
   function tzOffset(tz, now) {
@@ -196,8 +232,10 @@
     s.setProperty('--accent', rgb(mix(a.ac, b.ac, t)));
     s.setProperty('--muted', rgb(mix(a.mu, b.mu, t)));
     var ang = (-70 + 140 * p) * Math.PI / 180;
-    s.setProperty('--sh-x', (Math.sin(ang) * 18).toFixed(1) + 'px');
-    s.setProperty('--sh-y', (8 + (1 - Math.cos(ang)) * 14).toFixed(1) + 'px');
+    s.setProperty('--sh-x', (Math.sin(ang) * 26).toFixed(1) + 'px');
+    s.setProperty('--sh-y', (10 + (1 - Math.cos(ang)) * 18).toFixed(1) + 'px');
+    s.setProperty('--sun-p', (100 - p * 100).toFixed(1) + '%');
+    s.setProperty('--sun-a', (-30 + 60 * p).toFixed(1) + 'deg');
     if (dialPath) {
       var pt = dialPath.getPointAtLength(dialLen * p);
       dialSun.setAttribute('cx', pt.x); dialSun.setAttribute('cy', pt.y);
@@ -207,6 +245,64 @@
   }
   IA.setDay = setDay;
   setDay(IA.calm ? 0.55 : 0);
+
+  /* ---------- Namibie en direct : soleil de Windhoek (algorithme NOAA simplifié) ---------- */
+  var WDH = { lat: -22.5609, lon: 17.0658 };
+  function ymdIn(tz, d) {
+    var p = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d).split('-');
+    return [+p[0], +p[1] - 1, +p[2]];
+  }
+  function sunDay(y, m, d) {
+    var rad = Math.PI / 180, doy = Math.round((Date.UTC(y, m, d) - Date.UTC(y, 0, 0)) / 864e5);
+    var g = 2 * Math.PI / 365 * (doy - 1);
+    var eq = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+    var dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+    var ha = Math.acos(Math.cos(90.833 * rad) / (Math.cos(WDH.lat * rad) * Math.cos(dec)) - Math.tan(WDH.lat * rad) * Math.tan(dec)) / rad;
+    var base = Date.UTC(y, m, d);
+    return { rise: new Date(base + (720 - 4 * (WDH.lon + ha) - eq) * 60000), set: new Date(base + (720 - 4 * (WDH.lon - ha) - eq) * 60000) };
+  }
+  IA.sun = function (now) {
+    now = now || new Date();
+    var t = ymdIn('Africa/Windhoek', now), today = sunDay(t[0], t[1], t[2]);
+    var y = new Date(Date.UTC(t[0], t[1], t[2] - 1)), tm = new Date(Date.UTC(t[0], t[1], t[2] + 1));
+    var prevSet = sunDay(y.getUTCFullYear(), y.getUTCMonth(), y.getUTCDate()).set, nextRise = sunDay(tm.getUTCFullYear(), tm.getUTCMonth(), tm.getUTCDate()).rise;
+    var n = now.getTime(), r = today.rise.getTime(), st = today.set.getTime(), MIN = 60000, phase, p, night;
+    if (n >= r && n <= st) { p = (n - r) / (st - r); night = false; }
+    else if (n < r) { p = (n - prevSet.getTime()) / (r - prevSet.getTime()); night = true; }
+    else { p = (n - st) / (nextRise.getTime() - st); night = true; }
+    if (n < r - 30 * MIN || n > st + 40 * MIN) phase = 'night';
+    else if (n < r + 60 * MIN) phase = 'dawn';
+    else if (n > st - 75 * MIN) phase = 'golden';
+    else phase = 'day';
+    return { rise: today.rise, set: today.set, p: p, night: night, phase: phase };
+  };
+  var PHASE_TXT = { night: 'Nuit étoilée sur Windhoek', dawn: 'Le jour se lève sur Windhoek', golden: 'Lumière dorée sur Windhoek', day: 'Plein jour à Windhoek' };
+  IA.sunText = function (s) { return PHASE_TXT[s.phase]; };
+  var dialNow = $('[data-dial-now]');
+  function liveSun() {
+    if (!tFmt) return;
+    var sn = IA.sun();
+    IA.sunNow = sn;
+    H.setAttribute('data-wdh', sn.phase);
+    $$('[data-live]').forEach(function (box) {
+      box.classList.toggle('is-night', sn.night);
+      $('[data-live-state]', box).textContent = IA.sunText(sn);
+      $('[data-live-rise]', box).textContent = tFmt.format(sn.rise);
+      $('[data-live-set]', box).textContent = tFmt.format(sn.set);
+      var t = Math.max(0, Math.min(1, sn.p)), u = 1 - t;
+      var x = u * u * 14 + 2 * u * t * 120 + t * t * 226, yy = u * u * 86 + 2 * u * t * -26 + t * t * 86;
+      $$('.live__sun, .live__halo', box).forEach(function (c) { c.setAttribute('cx', x.toFixed(1)); c.setAttribute('cy', yy.toFixed(1)); });
+    });
+    $$('[data-intro-live]').forEach(function (el) { el.textContent = 'En ce moment : ' + IA.sunText(sn).charAt(0).toLowerCase() + IA.sunText(sn).slice(1) + ', ' + tFmt.format(new Date()).replace(':', ' h '); });
+    if (dialNow && dialPath) {
+      if (sn.night) dialNow.style.display = 'none';
+      else {
+        var q = dialPath.getPointAtLength(dialLen * Math.max(0, Math.min(1, sn.p)));
+        dialNow.style.display = ''; dialNow.setAttribute('transform', 'translate(' + q.x.toFixed(1) + ' ' + q.y.toFixed(1) + ')');
+      }
+    }
+  }
+  try { liveSun(); W.setInterval(liveSun, 60000); } catch (e) { if (W.console) console.error(e); }
 
   /* ---------- Curseur soleil ---------- */
   function initCursor() {
@@ -372,7 +468,8 @@
           ctx.fillStyle = 'rgba(255,250,240,' + a2.toFixed(3) + ')'; ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 6.283); ctx.fill();
         }
       }
-      function loop(time) { draw(time); if (visible && !IA.calm) raf = W.requestAnimationFrame(loop); }
+      var lastDraw = 0;
+      function loop(time) { if (!IA.isLite || time - lastDraw > 120) { draw(time); lastDraw = time; } if (visible && !IA.calm) raf = W.requestAnimationFrame(loop); }
       build(); draw(0);
       if ('IntersectionObserver' in W) new IntersectionObserver(function (es) {
         visible = es[0].isIntersecting;
@@ -384,7 +481,8 @@
   }
 
   /* ---------- Voile de sable entre les pages ---------- */
-  var veil = $('.veil');
+  var veil = $('.veil'), VT = 'onpagereveal' in W && W.CSS && CSS.supports('view-transition-name: a'), lastVT = null;
+  IA.vt = VT;
   function veilOut() {
     if (!veil || !H.classList.contains('veil-in')) return;
     sstore.del('ia-voile');
@@ -399,20 +497,109 @@
     if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || a.target === '_blank' || IA.calm || !IA.hasGSAP) return;
     var href = a.getAttribute('href');
     if (!/^[\w-]+\.html(#[\w-]+)?$/.test(href)) return;
+    if (VT) {
+      /* Navigateurs récents : transition native entre pages, la photo de la carte devient le héros de la fiche */
+      var slug = href.split('#')[0].replace('.html', '');
+      if (lastVT) { lastVT.style.viewTransitionName = ''; lastVT = null; }
+      if (W.IA_DATA && IA_DATA.fiches && IA_DATA.fiches[slug]) {
+        var card = a.closest('.trip, .qres, .wcard, .envie, .rel, .depart'), im = card && card.querySelector('img');
+        if (im) { im.style.viewTransitionName = 'vt-' + slug; lastVT = im; }
+      }
+      closeMenu();
+      return;
+    }
     e.preventDefault();
     closeMenu();
     sstore.set('ia-voile', '1');
     veil.classList.add('is-moving');
     gsap.fromTo(veil, { xPercent: -102 }, { xPercent: 0, duration: 0.65, ease: 'expo.inOut', onComplete: function () { W.location.href = href; } });
   });
-  W.addEventListener('pageshow', function (e) { if (e.persisted && veil && IA.hasGSAP) { gsap.set(veil, { xPercent: -102 }); veil.classList.remove('is-moving'); sstore.del('ia-voile'); } });
+  W.addEventListener('pageshow', function (e) { if (e.persisted && lastVT) { lastVT.style.viewTransitionName = ''; lastVT = null; } if (e.persisted && veil && IA.hasGSAP) { gsap.set(veil, { xPercent: -102 }); veil.classList.remove('is-moving'); sstore.del('ia-voile'); } });
+
+  /* ---------- Compteur à rouleaux (prix) ---------- */
+  IA.odometer = function (el, str) {
+    var old = el.getAttribute('data-odo') || el.textContent;
+    el.setAttribute('data-odo', str);
+    if (!IA.hasGSAP || IA.calm) { el.textContent = str; return; }
+    var od = old.replace(/\D/g, ''), nd = str.replace(/\D/g, ''), di = 0, cols = [];
+    var html = '<span class="sr-only">' + str + '</span><span class="odo" aria-hidden="true">';
+    for (var i = 0; i < str.length; i++) {
+      var c = str[i];
+      if (/\d/.test(c)) {
+        var strip = ''; for (var k = 0; k < 20; k++) strip += '<i>' + (k % 10) + '</i>';
+        html += '<span class="odo__c"><span class="odo__s">' + strip + '</span></span>';
+        var from = od.length === nd.length ? +od[di] : 0;
+        cols.push({ from: from, to: +nd[di] }); di++;
+      } else html += '<span class="odo__x">' + (c === ' ' || c === ' ' || c === ' ' ? '&nbsp;' : c) + '</span>';
+    }
+    el.innerHTML = html + '</span>';
+    var strips = el.querySelectorAll('.odo__s'), n = strips.length;
+    for (var j = 0; j < n; j++) {
+      var cfg = cols[j], target = cfg.to + 10;
+      gsap.fromTo(strips[j], { yPercent: -cfg.from * 5 }, { yPercent: -target * 5, duration: 1.1 + (n - j) * 0.12, ease: 'power3.inOut', delay: j * 0.04,
+        onComplete: j === 0 ? function () { if (el.getAttribute('data-odo') === str) W.setTimeout(function () { if (el.getAttribute('data-odo') === str) el.textContent = str; }, 200 + n * 120); } : null });
+    }
+  };
+
+  /* ---------- Safari de nuit : la lampe révèle les éléphants ---------- */
+  function initSafari() {
+    var box = $('[data-safari]'); if (!box) return;
+    var view = $('.safari__view', box), scene = $('.safari__scene', box), eyes = $$('.safari__eyes i', box);
+    var countEl = $('[data-safari-count]', box), doneEl = $('[data-safari-done]', box);
+    var pairs = [], found = 0;
+    for (var i = 0; i < eyes.length; i += 2) {
+      pairs.push({ a: eyes[i], b: eyes[i + 1], x: (parseFloat(eyes[i].style.getPropertyValue('--x')) + parseFloat(eyes[i + 1].style.getPropertyValue('--x'))) / 200, y: parseFloat(eyes[i].style.getPropertyValue('--y')) / 100, found: false });
+      var dl = (Math.random() * 5).toFixed(2) + 's'; eyes[i].style.animationDelay = dl; eyes[i + 1].style.animationDelay = dl;
+    }
+    var fx = 0.5, fy = 0.4, tx = 0.5, ty = 0.4, idleAt = 0, visible = false, raf = 0, t0 = performance.now();
+    function size() { return { vw: view.clientWidth, vh: view.clientHeight, sw: scene.offsetWidth }; }
+    function frame(now) {
+      raf = 0;
+      if (!visible) return;
+      var z = size();
+      if (now - idleAt > 2600 && !IA.calm) {
+        var t = (now - t0) / 1000;
+        tx = 0.5 + 0.44 * Math.sin(t * 0.33); ty = 0.36 + 0.14 * Math.sin(t * 0.71 + 1);
+      }
+      fx += (tx - fx) * 0.08; fy += (ty - fy) * 0.08;
+      var off = Math.max(0, z.sw - z.vw) * fx;
+      scene.style.transform = 'translate3d(' + (-off).toFixed(1) + 'px,0,0)';
+      var lx = fx * z.sw, ly = fy * z.vh, r = Math.max(95, Math.min(165, z.vw * 0.11));
+      scene.style.setProperty('--lx', lx.toFixed(1) + 'px'); scene.style.setProperty('--ly', ly.toFixed(1) + 'px'); scene.style.setProperty('--r', r.toFixed(0) + 'px');
+      pairs.forEach(function (p) {
+        var dx = p.x * z.sw - lx, dy = p.y * z.vh - ly, lit = Math.sqrt(dx * dx + dy * dy) < r * 0.62;
+        p.a.classList.toggle('is-lit', lit); p.b.classList.toggle('is-lit', lit);
+        if (lit && !p.found && now - idleAt <= 2600) {
+          p.found = true; found++;
+          countEl.textContent = found;
+          if (IA.hasGSAP && !IA.calm) gsap.fromTo(countEl, { scale: 1.8 }, { scale: 1, duration: 0.6, ease: 'back.out(3)' });
+          if (found === pairs.length) { doneEl.textContent = 'Bravo, toute la famille est là. Ce soir, on dort sous la Croix du Sud.'; box.classList.add('is-done'); }
+        }
+      });
+      raf = requestAnimationFrame(frame);
+    }
+    function kick() { if (!raf && visible) raf = requestAnimationFrame(frame); }
+    view.addEventListener('pointermove', function (e) {
+      var rc = view.getBoundingClientRect();
+      tx = Math.max(0, Math.min(1, (e.clientX - rc.left) / rc.width));
+      ty = Math.max(0.05, Math.min(0.95, (e.clientY - rc.top) / rc.height));
+      idleAt = performance.now(); kick();
+    });
+    view.addEventListener('pointerdown', function (e) { idleAt = performance.now(); var rc = view.getBoundingClientRect(); tx = (e.clientX - rc.left) / rc.width; ty = (e.clientY - rc.top) / rc.height; kick(); });
+    idleAt = -1e9;
+    if ('IntersectionObserver' in W) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; kick(); }).observe(view);
+    else { visible = true; kick(); }
+  }
 
   /* ---------- Démarrage ---------- */
-  IA.ready = function (fn) { (IA._ready = IA._ready || []).push(fn); };
+  var started = false;
+  function runReady(fn) { try { fn(); } catch (err) { if (W.console) console.error(err); } }
+  IA.ready = function (fn) { if (started) runReady(fn); else (IA._ready = IA._ready || []).push(fn); };
   function start() {
-    initCursor(); initMagnetic(); initReveals(); initDayCycle(); initStars();
+    started = true;
+    initCursor(); initMagnetic(); initReveals(); initDayCycle(); initStars(); initSafari();
     veilOut();
-    (IA._ready || []).forEach(function (fn) { try { fn(); } catch (err) { if (W.console) console.error(err); } });
+    (IA._ready || []).forEach(runReady);
     if (IA.hasGSAP) {
       W.addEventListener('load', function () { ScrollTrigger.refresh(); });
       W.setTimeout(function () { ScrollTrigger.refresh(); }, 1200);
@@ -423,5 +610,6 @@
     }
   }
   var fontsReady = D.fonts && D.fonts.ready ? D.fonts.ready : Promise.resolve();
-  Promise.race([fontsReady, new Promise(function (r) { W.setTimeout(r, 1200); })]).then(function () { W.requestAnimationFrame(start); });
+  var domReady = new Promise(function (r) { if (D.readyState !== 'loading') r(); else D.addEventListener('DOMContentLoaded', r); });
+  Promise.all([domReady, Promise.race([fontsReady, new Promise(function (r) { W.setTimeout(r, 1200); })])]).then(function () { W.requestAnimationFrame(start); });
 })();

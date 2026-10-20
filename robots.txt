@@ -1,0 +1,4 @@
+# Maquette : indexation désactivée. Mettre INDEXABLE = True dans le générateur à la mise en ligne.
+User-agent: *
+Disallow: /
+Sitemap: https://instinct-aventure-maquette.vercel.app/sitemap.xml

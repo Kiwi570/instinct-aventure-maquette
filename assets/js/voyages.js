@@ -1,7 +1,7 @@
 /* Nos voyages : filtres, carte des tracés, départs confirmés triés automatiquement */
 (function () {
   'use strict';
-  var IA = window.IA, $ = IA.$, $$ = IA.$$, W = window, DATA = window.IA_DATA;
+  var IA = window.IA, $ = IA.$, $$ = IA.$$, W = window, D = document, DATA = window.IA_DATA;
 
   function heroIn() {
     var heroBox = $('[data-gl]');
@@ -75,8 +75,17 @@
         (state.duree === 'all' || (state.duree === 'court' ? j <= 14 : j >= 17)) &&
         p <= state.budget && (state.region === 'all' || r.indexOf(state.region) >= 0);
     }
+    var sortSel = $('#f-sort'), order0 = cards.slice();
+    function sortCards() {
+      var v = sortSel ? sortSel.value : 'reco', arr = order0.slice();
+      if (v === 'prix-asc') arr.sort(function (a, b) { return +a.getAttribute('data-prix') - +b.getAttribute('data-prix'); });
+      else if (v === 'prix-desc') arr.sort(function (a, b) { return +b.getAttribute('data-prix') - +a.getAttribute('data-prix'); });
+      else if (v === 'duree') arr.sort(function (a, b) { return +a.getAttribute('data-jours') - +b.getAttribute('data-jours') || +a.getAttribute('data-prix') - +b.getAttribute('data-prix'); });
+      arr.forEach(function (c) { grid.insertBefore(c, empty); });
+    }
     function apply(animate) {
       var fs = (animate && W.Flip && !IA.calm) ? Flip.getState(cards) : null;
+      sortCards();
       var n = 0;
       cards.forEach(function (c) {
         var show = ok(c); c.hidden = !show; if (show) n++;
@@ -97,6 +106,7 @@
       b.addEventListener('click', function () { state[b.getAttribute('data-f')] = b.getAttribute('data-v'); apply(true); });
     });
     budget.addEventListener('input', function () { state.budget = +budget.value; apply(false); });
+    if (sortSel) sortSel.addEventListener('change', function () { apply(true); });
     budget.addEventListener('change', function () { apply(true); });
     $$('[data-reset]').forEach(function (b) { b.addEventListener('click', function () { state = { formule: 'all', duree: 'all', region: 'all', budget: 4300 }; budget.value = 4300; apply(true); }); });
     function setFormule(f, scroll) { state.formule = f; apply(true); if (scroll) IA.scrollTo('#catalogue'); }
@@ -116,9 +126,9 @@
     }
     cards.forEach(function (c) {
       c.addEventListener('pointerenter', function () { hot(c); });
-      c.addEventListener('focus', function () { hot(c); });
+      c.addEventListener('focusin', function () { hot(c); });
       c.addEventListener('pointerleave', function () { hot(null); });
-      c.addEventListener('blur', function () { hot(null); });
+      c.addEventListener('focusout', function () { hot(null); });
     });
     apply(false);
   }
@@ -136,5 +146,108 @@
     if (line) gsap.fromTo(line, { attr: { x2: 2 } }, { attr: { x2: 98 }, ease: 'none', scrollTrigger: { trigger: '[data-steps]', start: 'top 80%', end: 'top 35%', scrub: true } });
   }
 
-  IA.ready(function () { heroIn(); renderDeparts(); initCatalogue(); initDetails(); });
+
+  /* ---- Comparateur ---- */
+  var REG = DATA.regions, FORM = { autotour: 'Autotour', guide: 'Séjour guidé', confirme: 'Départ confirmé' };
+  function ficheOf(id) {
+    for (var slug in DATA.fiches) { var f = DATA.fiches[slug]; for (var m in f.modes) if (f.modes[m] === id) return { slug: slug, f: f, mode: m }; }
+    return null;
+  }
+  function pick(v, m) { return (v && !Array.isArray(v) && typeof v === 'object') ? v[m] : v; }
+  function initCompare() {
+    var bar = $('[data-cmpbar]'), view = $('#comparer'); if (!bar || !view) return;
+    var sel = [], last = null;
+    var boxes = $$('[data-compare]');
+    function syncBar() {
+      boxes.forEach(function (b) { b.checked = sel.indexOf(b.getAttribute('data-compare')) >= 0; b.closest('.trip').classList.toggle('is-compared', b.checked); });
+      $('[data-cmp-count]', bar).textContent = sel.length;
+      $('[data-cmp-open]', bar).disabled = sel.length < 2;
+      bar.hidden = sel.length === 0;
+      if (!bar.hidden && W.gsap && !IA.calm && sel.length === 1) gsap.fromTo(bar, { yPercent: 120 }, { yPercent: 0, duration: 0.6, ease: 'expo.out' });
+    }
+    boxes.forEach(function (b) {
+      b.addEventListener('change', function () {
+        var id = b.getAttribute('data-compare'), i = sel.indexOf(id);
+        if (b.checked && i < 0) { sel.push(id); if (sel.length > 2) sel.shift(); }
+        if (!b.checked && i >= 0) sel.splice(i, 1);
+        syncBar();
+        if (sel.length === 2) IA.toast && IA.toast('Deux voyages sélectionnés : cliquez sur Comparer.');
+      });
+    });
+    function row(label, vals) { return '<tr><th scope="row">' + label + '</th>' + vals.map(function (v) { return '<td>' + v + '</td>'; }).join('') + '</tr>'; }
+    function render() {
+      var cs = sel.map(function (id) { return DATA.circuits.filter(function (c) { return c.id === id; })[0]; });
+      var fs = cs.map(function (c) { return ficheOf(c.id); });
+      var head = '<tr><th></th>' + cs.map(function (c) { return '<th scope="col"><img src="assets/img/' + c.img + '-640.webp" alt=""><a class="link" href="' + c.page + '">' + c.name + '</a></th>'; }).join('') + '</tr>';
+      var minP = Math.min.apply(null, cs.map(function (c) { return c.prix; }));
+      var rows = [
+        row('Formule', cs.map(function (c) { return FORM[c.formule]; })),
+        row('Durée', cs.map(function (c) { return c.nuitsLabel; })),
+        row('Prix', cs.map(function (c) { return '<b class="num' + (c.prix === minP ? ' best' : '') + '">' + IA.euro(c.prix) + '</b><br><span class="muted">TTC par personne, base ' + c.base + '</span>'; })),
+        row('Quand', cs.map(function (c) { return c.formule === 'confirme' ? 'Départ ' + c.departLabel + (c.statut === 'complet' ? ' · complet' : '') : (c.periode || 'Dates à définir avec vous'); })),
+        row('Régions', cs.map(function (c) { return c.regions.map(function (r) { return REG[r]; }).join(', '); })),
+        row('Nuits', fs.map(function (x) { return x && x.f.stats.kind === 'nuits' ? x.f.stats.items.map(function (it) { return it[1] + ' ' + it[0].toLowerCase().replace('nuits ', ''); }).join('<br>') : '—'; })),
+        row('Accompagnement', fs.map(function (x) { return x ? pick(x.f.driver, x.mode) : '—'; })),
+        row('Inclus', fs.map(function (x) { var l = x ? pick(x.f.incl, x.mode) : []; return '<ul>' + l.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>'; })),
+        row('Non inclus', fs.map(function (x) { var l = x ? pick(x.f.nonIncl, x.mode) : []; return '<ul class="muted">' + l.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>'; })),
+        row('', cs.map(function (c) { return '<div class="btn-row"><a class="btn btn--sm" href="' + c.page + '">Voir le voyage</a><button class="icon-btn fav-btn" type="button" data-fav="' + c.id + '" aria-pressed="false" aria-label="Ajouter à ma liste d’envies"><svg aria-hidden="true"><use href="#i-heart"/></svg></button></div>'; }))
+      ];
+      $('[data-cmp-body]', view).innerHTML = '<div class="cmptable"><table><thead>' + head + '</thead><tbody>' + rows.join('') + '</tbody></table></div>';
+      IA.favSync && IA.favSync();
+    }
+    function open() {
+      last = D.activeElement; render();
+      view.classList.add('is-open'); view.setAttribute('aria-hidden', 'false');
+      D.documentElement.classList.add('devis-open');
+      if (IA.lenis) IA.lenis.stop();
+      var c = $('[data-cmp-close].devis__close', view); if (c) c.focus({ preventScroll: true });
+    }
+    function close() {
+      view.classList.remove('is-open'); view.setAttribute('aria-hidden', 'true');
+      D.documentElement.classList.remove('devis-open');
+      if (IA.lenis) IA.lenis.start();
+      if (last) last.focus({ preventScroll: true });
+    }
+    $('[data-cmp-open]', bar).addEventListener('click', open);
+    $('[data-cmp-clear]', bar).addEventListener('click', function () { sel = []; syncBar(); });
+    view.addEventListener('click', function (e) { if (e.target.closest('[data-cmp-close]')) close(); });
+    D.addEventListener('keydown', function (e) { if (e.key === 'Escape' && view.classList.contains('is-open')) close(); });
+    syncBar();
+  }
+
+  /* ---- Quand partir ? ---- */
+  var MOIS_L = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+  function monthsOf(c) {
+    if (c.formule === 'confirme') return [+c.depart.split('-')[1] - 1];
+    var x = ficheOf(c.id);
+    if (x && x.f.season && x.f.season[x.mode]) return x.f.season[x.mode];
+    return null;
+  }
+  function initWhen() {
+    var pick0 = $('[data-mpick]'), out = $('[data-when]'); if (!pick0 || !out) return;
+    var btns = $$('[data-month]', pick0);
+    function card(c, note) {
+      return '<a class="wcard" href="' + c.page + '"><img src="assets/img/' + c.img + '-640.webp" alt="" loading="lazy"><span><b>' + c.name + '</b><small>' + FORM[c.formule] + ' · ' + c.jours + ' jours · ' + IA.euro(c.prix) + '</small>' + (note ? '<small class="wnote">' + note + '</small>' : '') + '</span></a>';
+    }
+    function sel(m) {
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', +b.getAttribute('data-month') === m ? 'true' : 'false'); });
+      var yes = [], ask = [];
+      DATA.circuits.forEach(function (c) {
+        var ms = monthsOf(c);
+        if (ms === null) ask.push(c);
+        else if (ms.indexOf(m) >= 0) yes.push(c);
+      });
+      var dry = m >= 4 && m <= 9;
+      out.innerHTML = '<p class="when__head"><b>En ' + MOIS_L[m] + '</b> · ' + (dry ? 'saison sèche, idéale pour la faune' : 'hors saison sèche') + '</p>' +
+        (yes.length ? '<div class="when__grid">' + yes.map(function (c) { return card(c, c.statut === 'complet' ? 'Départ ' + c.departLabel + ' complet' : (c.formule === 'confirme' ? 'Départ ' + c.departLabel : (c.periode || ''))); }).join('') + '</div>'
+          : '<p class="muted">Aucun voyage annoncé pour ce mois. Nous pouvons étudier une date sur mesure.</p>') +
+        (ask.length ? '<p class="when__sub">Sur demande, dates à définir avec vous</p><div class="when__grid when__grid--ask">' + ask.map(function (c) { return card(c); }).join('') + '</div>' : '');
+      if (W.gsap && !IA.calm) gsap.from(out.querySelectorAll('.wcard'), { y: 18, opacity: 0, stagger: 0.04, duration: 0.5, ease: 'expo.out' });
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { sel(+b.getAttribute('data-month')); }); });
+    var now = new Date().getMonth();
+    sel(now);
+  }
+
+  IA.ready(function () { heroIn(); renderDeparts(); initCatalogue(); initCompare(); initWhen(); initDetails(); });
 })();
