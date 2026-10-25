@@ -35,7 +35,7 @@
       });
       stamp.hidden = !all;
       if (all && !wasAll && !first) {
-        IA.announce && IA.announce('Tout est prêt : bon voyage !');
+        IA.announce && IA.announce('Tout est prêt : bon voyage !');
         if (W.gsap && !IA.calm) gsap.fromTo(stamp, { scale: 2.6, rotation: -24, opacity: 0 }, { scale: 1, rotation: -9, opacity: 1, duration: 0.55, ease: 'back.out(2.2)' });
       }
       wasAll = all; first = false;
@@ -84,7 +84,7 @@
     var list = $('[data-palu-trips]'); if (!list) return;
     var hit = DATA.circuits.filter(function (c) { return c.regions.indexOf('okavango') >= 0; });
     var seen = {}, uniq = hit.filter(function (c) { var k = c.page.split('#')[0]; if (seen[k]) return false; seen[k] = 1; return true; });
-    list.innerHTML = '<p><b>Nos voyages qui passent par l’Okavango et le Caprivi</b>, en zone de risque toute l’année :</p><div class="palu__chips">' +
+    list.innerHTML = '<p><b>Nos voyages qui passent par l’Okavango et le Caprivi</b>, en zone de risque toute l’année :</p><div class="palu__chips">' +
       uniq.map(function (c) { return '<button type="button" class="fbtn" data-palu-trip="' + c.id + '" aria-pressed="false">' + (c.short || c.name) + '</button>'; }).join('') + '</div>';
     var cur = null;
     function routeIds(c) {

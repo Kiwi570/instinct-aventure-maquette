@@ -116,8 +116,8 @@
       if (W.gsap && !IA.calm) gsap.fromTo(slam.firstChild, { scale: 2.8, rotation: -28, opacity: 0 }, { scale: 1, rotation: -8, opacity: 1, duration: 0.5, ease: 'back.out(2.4)' });
       W.clearTimeout(slamT); slamT = W.setTimeout(function () { slam.classList.remove('is-on'); }, 2600);
     }
-    IA.announce && IA.announce('Nouveau tampon dans votre carnet de route : ' + REG[r] + '.');
-    if (all) W.setTimeout(function () { IA.toast('Carnet complet : toute la Namibie est tamponnée. Prêt pour la vraie piste ?'); }, 900);
+    IA.announce && IA.announce('Nouveau tampon dans votre carnet de route : ' + REG[r] + '.');
+    if (all) W.setTimeout(function () { IA.toast('Carnet complet : toute la Namibie est tamponnée. Prêt pour la vraie piste ?'); }, 900);
   }
   IA.stampStop = function (stop) { earn(REGION_OF[stop]); };
   D.addEventListener('ia:day', function (e) { IA.stampStop(e.detail.stop); });

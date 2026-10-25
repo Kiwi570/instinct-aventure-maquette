@@ -72,8 +72,9 @@
     if (href.charAt(0) === '#') hash = href;
     else {
       var m = href.match(/^([\w-]+\.html)(#[\w-]+)?$/);
-      var here = (location.pathname.split('/').pop() || 'index.html');
-      if (m && m[2] && (m[1] === here || (here === '' && m[1] === 'index.html') || (m[1] === 'index.html' && IA.page === 'home'))) hash = m[2];
+      // avec cleanUrls, l'adresse est « /voyages » quand le lien vaut « voyages.html »
+      var norm = function (p) { return (p.split('/').pop() || 'index').replace(/\.html$/, ''); };
+      if (m && m[2] && norm(m[1]) === norm(location.pathname)) hash = m[2];
     }
     if (!hash || hash.length < 2) return;
     var el = D.getElementById(hash.slice(1));
@@ -101,15 +102,16 @@
   onScroll();
   $$('[data-nav]').forEach(function (a) {
     var n = a.getAttribute('data-nav');
-    if ((IA.page === 'voyages' && n === 'voyages') || (IA.page === 'circuit' && n === 'voyages')) a.setAttribute('aria-current', 'page');
+    if ((IA.page === 'voyages' && n === 'voyages') || (IA.page === 'circuit' && n === 'voyages') || (IA.page === 'preparer' && n === 'preparer')) a.setAttribute('aria-current', 'page');
   });
 
   /* ---------- Menu mobile ---------- */
   var menu = $('#menu'), burger = $('[data-menu]');
+  if (menu) menu.setAttribute('data-lenis-prevent', '');
   function closeMenu(restore) {
     if (!menu || !menu.classList.contains('is-open')) return;
     menu.classList.remove('is-open'); menu.setAttribute('aria-hidden', 'true');
-    D.body.classList.remove('menu-open'); burger.setAttribute('aria-expanded', 'false');
+    D.body.classList.remove('menu-open'); H.classList.remove('verrou'); burger.setAttribute('aria-expanded', 'false');
     burger.setAttribute('aria-label', 'Ouvrir le menu');
     if (lenis) lenis.start();
     if (restore) burger.focus();
@@ -119,7 +121,7 @@
     var open = !menu.classList.contains('is-open');
     if (!open) return closeMenu(true);
     menu.classList.add('is-open'); menu.setAttribute('aria-hidden', 'false');
-    D.body.classList.add('menu-open'); burger.setAttribute('aria-expanded', 'true');
+    D.body.classList.add('menu-open'); H.classList.add('verrou'); burger.setAttribute('aria-expanded', 'true');
     burger.setAttribute('aria-label', 'Fermer le menu');
     if (lenis) lenis.stop();
     W.setTimeout(function () { var first = $('nav a', menu); if (first) first.focus({ preventScroll: true }); }, 80);
@@ -179,8 +181,8 @@
     });
     $$('[data-offset-short]').forEach(function (el) { el.textContent = diff === 0 ? '0 h' : (diff > 0 ? '+' : '−') + Math.abs(diff) + ' h'; });
     $$('[data-offset-long]').forEach(function (el) {
-      el.textContent = diff === 0 ? 'de décalage avec la France en ce moment ; +1 h quand la France passe à l’heure d’hiver'
-        : 'de décalage avec la France en ce moment ; aucun quand la France est à l’heure d’été';
+      el.textContent = diff === 0 ? 'même heure qu’à Paris en ce moment, 1 h de plus quand la France passe à l’heure d’hiver'
+        : Math.abs(diff) + ' h ' + (diff > 0 ? 'de plus' : 'de moins') + ' qu’à Paris en ce moment, même heure quand la France est à l’heure d’été';
     });
   }
   tick(); W.setInterval(tick, 20000);
@@ -230,6 +232,8 @@
     s.setProperty('--bg', rgb(mix(a.bg, b.bg, t)));
     s.setProperty('--bg-2', rgb(mix(a.bg2, b.bg2, t)));
     s.setProperty('--accent', rgb(mix(a.ac, b.ac, t)));
+    // même teinte, assombrie, pour les petits textes en accent : ≥ 5:1 sur le fond à toute heure
+    s.setProperty('--accent-txt', rgb(mix(a.ac, b.ac, t).map(function (v) { return Math.round(v * 0.72); })));
     s.setProperty('--muted', rgb(mix(a.mu, b.mu, t)));
     var ang = (-70 + 140 * p) * Math.PI / 180;
     s.setProperty('--sh-x', (Math.sin(ang) * 26).toFixed(1) + 'px');
@@ -293,7 +297,7 @@
       var x = u * u * 14 + 2 * u * t * 120 + t * t * 226, yy = u * u * 86 + 2 * u * t * -26 + t * t * 86;
       $$('.live__sun, .live__halo', box).forEach(function (c) { c.setAttribute('cx', x.toFixed(1)); c.setAttribute('cy', yy.toFixed(1)); });
     });
-    $$('[data-intro-live]').forEach(function (el) { el.textContent = 'En ce moment : ' + IA.sunText(sn).charAt(0).toLowerCase() + IA.sunText(sn).slice(1) + ', ' + tFmt.format(new Date()).replace(':', ' h '); });
+    $$('[data-intro-live]').forEach(function (el) { el.textContent = 'En ce moment : ' + IA.sunText(sn).charAt(0).toLowerCase() + IA.sunText(sn).slice(1) + ', ' + tFmt.format(new Date()).replace(':', ' h '); });
     if (dialNow && dialPath) {
       if (sn.night) dialNow.style.display = 'none';
       else {
@@ -497,6 +501,8 @@
     if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || a.target === '_blank' || IA.calm || !IA.hasGSAP) return;
     var href = a.getAttribute('href');
     if (!/^[\w-]+\.html(#[\w-]+)?$/.test(href)) return;
+    var cur = function (p) { return (p.split('/').pop() || 'index').replace(/\.html$/, ''); };
+    if (cur(href.split('#')[0]) === cur(location.pathname) && href.indexOf('#') < 0) { e.preventDefault(); closeMenu(); IA.scrollTo(D.body); return; }
     if (VT) {
       /* Navigateurs récents : transition native entre pages, la photo de la carte devient le héros de la fiche */
       var slug = href.split('#')[0].replace('.html', '');
@@ -514,7 +520,7 @@
     veil.classList.add('is-moving');
     gsap.fromTo(veil, { xPercent: -102 }, { xPercent: 0, duration: 0.65, ease: 'expo.inOut', onComplete: function () { W.location.href = href; } });
   });
-  W.addEventListener('pageshow', function (e) { if (e.persisted && lastVT) { lastVT.style.viewTransitionName = ''; lastVT = null; } if (e.persisted && veil && IA.hasGSAP) { gsap.set(veil, { xPercent: -102 }); veil.classList.remove('is-moving'); sstore.del('ia-voile'); } });
+  W.addEventListener('pageshow', function (e) { if (e.persisted) closeMenu(); if (e.persisted && lastVT) { lastVT.style.viewTransitionName = ''; lastVT = null; } if (e.persisted && veil && IA.hasGSAP) { gsap.set(veil, { xPercent: -102 }); veil.classList.remove('is-moving'); sstore.del('ia-voile'); } });
 
   /* ---------- Compteur à rouleaux (prix) ---------- */
   IA.odometer = function (el, str) {

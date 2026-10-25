@@ -139,8 +139,8 @@ window.IA_DATA.fiches = {
     overview: {
       title: ['Découverte faune', 'et paysages'],
       text: {
-        autotour: ['Un séjour de 14 jours en autotour : vous conduisez, nous organisons tout. De la côte atlantique au fleuve Okavango, en passant par le Damaraland et le parc d’Etosha, le parcours est pensé pour la nature et l’observation des animaux.'],
-        guide: ['Un séjour de 14 jours guidé de bout en bout : un chauffeur-guide conduit et vous accompagne tout au long du voyage. De la côte atlantique au fleuve Okavango, en passant par le Damaraland et le parc d’Etosha, le parcours est pensé pour la nature et l’observation des animaux.']
+        autotour: ['Un séjour de 14 jours en autotour : vous conduisez, nous organisons tout. De la côte atlantique au fleuve Okavango, en passant par le Damaraland et le parc d’Etosha, le parcours est pensé pour la nature et l’observation des animaux.'],
+        guide: ['Un séjour de 14 jours guidé de bout en bout : un chauffeur-guide conduit et vous accompagne tout au long du voyage. De la côte atlantique au fleuve Okavango, en passant par le Damaraland et le parc d’Etosha, le parcours est pensé pour la nature et l’observation des animaux.']
       },
       imgs: [['buffles-okavango', 'Buffles au bord de l’Okavango'], ['guepier-carmin', 'Guêpiers carmin sur une branche']]
     },
@@ -154,18 +154,18 @@ window.IA_DATA.fiches = {
       { j: 2, stop: 'swakopmund', t: 'Vers Swakopmund', nuit: 'Appartement', img: 'g-cote-brume-dunes-4x5',
         a: 'Route goudronnée à travers le désert du Namib (4 h). Installation dans un appartement tout équipé près de l’océan et du centre-ville. Courses, balade sur la côte, restaurants et food trucks.' },
       { j: 3, stop: 'walvisbay', after: ['swakopmund'], t: 'Sortie en mer à Walvis Bay', nuit: 'Appartement', img: 'otaries-fourrure',
-        a: 'Minibus jusqu’à Walvis Bay et sortie en bateau à la rencontre des otaries à fourrure, dauphins et pélicans, avec repas léger à bord. Après-midi libre : dunes ou ville. Nuit à l’appartement.' },
+        a: 'Minibus jusqu’à Walvis Bay et sortie en bateau à la rencontre des otaries à fourrure, dauphins et pélicans, avec repas léger à bord. Après-midi libre : dunes ou ville. Nuit à l’appartement.' },
       { j: 4, stop: 'brandberg', via: 'uis', t: 'Le Brandberg', nuit: 'Camping', img: 'rocher-damaraland',
         a: 'Départ matinal vers le Damaraland via Uis, jusqu’au pied du Brandberg, point culminant de la Namibie. Paysages et faune locale, dont les éléphants du désert. Nuit en camping équipé avec restaurant et bar.' },
       { j: 5, stop: 'okaukuejo', t: 'Entrée dans Etosha', nuit: 'Camping', img: 'girafe-etosha',
         a: 'Route vers le parc d’Etosha, arrivée à Okaukuejo avant la nuit. Observation de la faune au point d’eau, un incontournable en saison sèche. Nuit en camping dans le parc.' },
       { j: 6, stop: 'namutoni', t: 'Traversée d’Etosha', nuit: 'Camping', img: 'guepard-etosha',
-        a: 'D’Okaukuejo à Namutoni par les pistes : félins, éléphants, zèbres, gnous, springboks, oryx, impalas, koudous, girafes… Nuit en camping à Namutoni.',
-        g: 'D’Okaukuejo à Namutoni par les pistes, accompagné par votre chauffeur-guide : félins, éléphants, zèbres, gnous, springboks, oryx, impalas, koudous, girafes… Nuit en camping à Namutoni.' },
+        a: 'D’Okaukuejo à Namutoni par les pistes : félins, éléphants, zèbres, gnous, springboks, oryx, impalas, koudous, girafes… Nuit en camping à Namutoni.',
+        g: 'D’Okaukuejo à Namutoni par les pistes, accompagné par votre chauffeur-guide : félins, éléphants, zèbres, gnous, springboks, oryx, impalas, koudous, girafes… Nuit en camping à Namutoni.' },
       { j: 7, stop: 'rundu', via: 'grootfontein', t: 'Rundu et l’Okavango', nuit: 'Lodge', img: 'hippopotames-okavango-2',
         a: 'Route vers Rundu via Grootfontein. Nuit en lodge sur les rives du fleuve.' },
       { j: 8, stop: 'divundu', t: 'Divundu, porte du Caprivi', nuit: 'Camping au lodge', img: 'buffles-okavango',
-        a: 'Visite possible de la réserve de Mahango en route : début du delta, faune exceptionnelle, loin de la foule d’Etosha. Nuit en camping dans un lodge au bord du fleuve (bungalow en option), avec activités sur place : bateau, pêche.' },
+        a: 'Visite possible de la réserve de Mahango en route : début du delta, faune exceptionnelle, loin de la foule d’Etosha. Nuit en camping dans un lodge au bord du fleuve (bungalow en option), avec activités sur place : bateau, pêche.' },
       { j: 9, stop: 'mahango', t: 'Bwabwata et Mahango', nuit: 'Camping au lodge', img: 'elephants-buffalo',
         a: 'Matin dans la Buffalo Core Area du parc national de Bwabwata, soir dans la réserve de Mahango jusqu’à la frontière du Botswana. Partez tôt et rentrez tard pour les fauves, buffles et éléphants. Nuit au lodge (bungalow en option).',
         g: 'Matin dans la Buffalo Core Area du parc national de Bwabwata, soir dans la réserve de Mahango jusqu’à la frontière du Botswana. Départ tôt et retour tard pour observer fauves, buffles et éléphants. Nuit au lodge (bungalow en option).' },
@@ -194,8 +194,8 @@ window.IA_DATA.fiches = {
       img2: 'bivouac-4x4-nuit', img2Alt: 'Bivouac de nuit autour du feu',
       kits: ['Tentes de toit pour 4', '5 places', 'Frigo', 'Camping et cuisine'],
       text: {
-        autotour: 'Vous récupérez à l’aéroport de Windhoek un Toyota Hilux 4x4 diesel entièrement équipé : tentes de toit pour 4 personnes (5 places), frigo, matériel de camping et de cuisine.',
-        guide: 'Vous êtes accueillis à l’aéroport de Windhoek par votre chauffeur-guide, au volant d’un Toyota Hilux 4x4 diesel entièrement équipé : tentes de toit pour 4 personnes (5 places), frigo, matériel de camping et de cuisine.'
+        autotour: 'Vous récupérez à l’aéroport de Windhoek un Toyota Hilux 4x4 diesel entièrement équipé : tentes de toit pour 4 personnes (5 places), frigo, matériel de camping et de cuisine.',
+        guide: 'Vous êtes accueillis à l’aéroport de Windhoek par votre chauffeur-guide, au volant d’un Toyota Hilux 4x4 diesel entièrement équipé : tentes de toit pour 4 personnes (5 places), frigo, matériel de camping et de cuisine.'
       }
     },
     gallery: [['guepard-etosha', 'Guépard, Etosha'], ['hippopotame-okavango', 'Hippopotame, Okavango'], ['guepier-carmin', 'Guêpiers carmin'], ['otaries-fourrure', 'Otaries à fourrure'], ['buffles-okavango', 'Buffles, Okavango'], ['flamants', 'Flamants'], ['hippopotames-okavango-2', 'Hippopotame, Okavango']],
@@ -204,13 +204,13 @@ window.IA_DATA.fiches = {
       ['Côte atlantique', 'Swakopmund et Walvis Bay, entre océan et dunes du Namib.', '22°41′S 14°32′E', 'otaries-cape-cross'],
       ['Damaraland', 'Le massif du Brandberg et ses éléphants du désert.', '21°08′S 14°35′E', 'rocher-damaraland'],
       ['Parc d’Etosha', 'D’Okaukuejo à Namutoni, la plus grande concentration de faune du pays.', '19°11′S 15°55′E', 'girafe-etosha'],
-      ['Okavango et Caprivi', 'Bwabwata et Mahango : fleuve, delta et faune très diversifiée.', '18°06′S 21°32′E', 'elephants-buffalo'],
+      ['Okavango et Caprivi', 'Bwabwata et Mahango : fleuve, delta et faune très diversifiée.', '18°06′S 21°32′E', 'elephants-buffalo'],
       ['Waterberg', 'Plateau, randonnée et fin de séjour au calme.', '20°31′S 17°14′E', 'g-plateau-waterberg-4x5']
     ],
     assist: {
       img: 'koudou-coucher-soleil', imgAlt: 'Silhouette d’un koudou au coucher du soleil',
       text: {
-        autotour: 'Un numéro dédié joignable sur WhatsApp : en cas de panne, de retard ou de question sur la route, une personne de notre équipe vous répond en français, et vous aide à ajuster l’itinéraire si besoin.',
+        autotour: 'Un numéro dédié joignable sur WhatsApp : en cas de panne, de retard ou de question sur la route, une personne de notre équipe vous répond en français, et vous aide à ajuster l’itinéraire si besoin.',
         guide: 'Votre chauffeur-guide est à vos côtés, et notre équipe reste joignable tout au long du voyage pour ajuster l’itinéraire si besoin.'
       }
     },
@@ -225,7 +225,7 @@ window.IA_DATA.fiches = {
     overview: {
       title: ['Toute la Namibie,', 'en 21 jours'],
       text: {
-        autotour: ['Un autotour « self-drive » de 21 jours et 20 nuits pour parcourir la Namibie dans son intégralité, au volant d’un 4x4 Toyota Hilux tout équipé (tentes de toit, frigo, matériel de camping), pris en charge dès l’aéroport de Windhoek. Assurance du véhicule incluse et kilométrage illimité.',
+        autotour: ['Un autotour « self-drive » de 21 jours et 20 nuits pour parcourir la Namibie dans son intégralité, au volant d’un 4x4 Toyota Hilux tout équipé (tentes de toit, frigo, matériel de camping), pris en charge dès l’aéroport de Windhoek. Assurance du véhicule incluse et kilométrage illimité.',
           'L’itinéraire alterne 12 nuits en camping et 8 nuits en lodge, bungalow ou gîte tout équipé, à travers Etosha, l’Okavango, le Waterberg, le Spitzkoppe, le Brandberg, Swakopmund et le désert du Namib jusqu’à Sossusvlei.'],
         guide: ['Un séjour guidé de 21 jours et 20 nuits pour parcourir la Namibie dans son intégralité, accompagné d’un chauffeur-guide au volant d’un 4x4 Toyota Hilux tout équipé (tentes de toit, frigo, matériel de camping), dès votre arrivée à l’aéroport de Windhoek.',
           'L’itinéraire alterne 12 nuits en camping et 8 nuits en lodge, bungalow ou gîte tout équipé, à travers Etosha, l’Okavango, le Waterberg, le Spitzkoppe, le Brandberg, Swakopmund et le désert du Namib jusqu’à Sossusvlei.']
@@ -261,8 +261,8 @@ window.IA_DATA.fiches = {
       { j: 21, stop: 'windhoek', t: 'Windhoek, retour', nuit: 'Vol retour', a: 'Visite de Windhoek et retour à l’aéroport.', g: 'Visite de Windhoek et retour à l’aéroport, avec votre chauffeur-guide.' }
     ],
     incl: {
-      autotour: ['Le 4x4 Toyota Hilux tout équipé, pris en charge à l’aéroport', 'L’assurance du véhicule et le kilométrage illimité', 'Les 20 nuits réservées : 12 en camping, 8 en lodge, bungalow ou gîte', 'La sortie en bateau à Walvis Bay', 'L’assistance par WhatsApp tout au long du voyage'],
-      guide: ['Le chauffeur-guide dès votre arrivée à Windhoek', 'Le 4x4 Toyota Hilux tout équipé', 'Les 20 nuits réservées : 12 en camping, 8 en lodge, bungalow ou gîte', 'La sortie en bateau à Walvis Bay', 'L’assistance par WhatsApp tout au long du voyage']
+      autotour: ['Le 4x4 Toyota Hilux tout équipé, pris en charge à l’aéroport', 'L’assurance du véhicule et le kilométrage illimité', 'Les 20 nuits réservées : 12 en camping, 8 en lodge, bungalow ou gîte', 'La sortie en bateau à Walvis Bay', 'L’assistance par WhatsApp tout au long du voyage'],
+      guide: ['Le chauffeur-guide dès votre arrivée à Windhoek', 'Le 4x4 Toyota Hilux tout équipé', 'Les 20 nuits réservées : 12 en camping, 8 en lodge, bungalow ou gîte', 'La sortie en bateau à Walvis Bay', 'L’assistance par WhatsApp tout au long du voyage']
     },
     nonIncl: ['Les vols entre l’Europe et Windhoek', 'La nourriture', 'Le carburant', 'Les entrées dans les parcs nationaux'],
     guideNote: true,
@@ -271,8 +271,8 @@ window.IA_DATA.fiches = {
       img2: 'installation-camp', img2Alt: 'Installation de la tente de toit au camping',
       kits: ['Tentes de toit', 'Frigo', 'Matériel de camping', 'Kilométrage illimité'],
       text: {
-        autotour: 'Un 4x4 Toyota Hilux tout équipé, pris en charge dès l’aéroport de Windhoek : tentes de toit, frigo et matériel de camping. Assurance du véhicule incluse et kilométrage illimité.',
-        guide: 'Votre chauffeur-guide vous accueille à l’aéroport de Windhoek au volant d’un 4x4 Toyota Hilux tout équipé : tentes de toit, frigo et matériel de camping.'
+        autotour: 'Un 4x4 Toyota Hilux tout équipé, pris en charge dès l’aéroport de Windhoek : tentes de toit, frigo et matériel de camping. Assurance du véhicule incluse et kilométrage illimité.',
+        guide: 'Votre chauffeur-guide vous accueille à l’aéroport de Windhoek au volant d’un 4x4 Toyota Hilux tout équipé : tentes de toit, frigo et matériel de camping.'
       }
     },
     gallery: [['lions-famille', 'Lionnes et lionceau, Etosha'], ['rocher-damaraland', 'Rocher du Damaraland'], ['cameleon', 'Caméléon'], ['girafe-etosha', 'Girafe, Etosha'], ['paysage-damaraland', 'Paysage du Damaraland'], ['elephants-buffalo', 'Éléphants, Buffalo'], ['sossusvlei', 'Sossusvlei']],
@@ -287,7 +287,7 @@ window.IA_DATA.fiches = {
     assist: {
       img: 'koudou-coucher-soleil', imgAlt: 'Silhouette d’un koudou au coucher du soleil',
       text: {
-        autotour: 'Une assistance disponible par WhatsApp tout au long du voyage : en cas de panne, de retard ou de question sur la route, une personne de notre équipe vous répond en français.',
+        autotour: 'Une assistance disponible par WhatsApp tout au long du voyage : en cas de panne, de retard ou de question sur la route, une personne de notre équipe vous répond en français.',
         guide: 'Votre chauffeur-guide est à vos côtés du premier au dernier jour, et notre équipe reste joignable par WhatsApp tout au long du voyage.'
       }
     },
@@ -299,7 +299,7 @@ window.IA_DATA.fiches = {
     h1: ['Immersion', 'Sauvage'],
     hero: { img: 'immersion-panorama', alt: 'Vue panoramique sur le Damaraland depuis un rocher', pos: '0.5 0.5' },
     eyebrow: 'Damaraland, Etosha & Swakopmund · 10 jours / 9 nuits',
-    periodeNote: 'À confirmer : le site indique aussi « de mars à novembre »',
+    periodeNote: 'À confirmer : le site indique aussi « de mars à novembre »',
     overview: {
       title: ['Une Namibie', 'sauvage et authentique'],
       text: ['De l’océan Atlantique aux grands espaces du Damaraland, vivez une Namibie sauvage et authentique, entre observation de la faune, paysages grandioses et séjour privilégié au cœur d’un territoire privé de 11 000 ha.',
@@ -311,13 +311,13 @@ window.IA_DATA.fiches = {
     driver: { guide: 'Véhicule et chauffeur dédiés pendant tout le séjour' },
     days: [
       { j: 1, stop: 'swakopmund', t: 'Arrivée à Windhoek et départ pour Swakopmund', nuit: 'Gîte', img: 'g-cote-brume-dunes-4x5',
-        a: 'Votre séjour débute à l’aéroport international de Windhoek : notre chauffeur vous attend à la sortie, après les bagages et la douane, puis prend la route de Swakopmund. Première nuit dans un gîte privatif à proximité immédiate de l’océan.' },
+        a: 'Votre séjour débute à l’aéroport international de Windhoek : notre chauffeur vous attend à la sortie, après les bagages et la douane, puis prend la route de Swakopmund. Première nuit dans un gîte privatif à proximité immédiate de l’océan.' },
       { j: 2, stop: 'swakopmund', t: 'Découverte de Swakopmund', nuit: 'Gîte', img: 'otaries-cape-cross',
-        a: 'Petit-déjeuner inclus, puis découverte de la ville balnéaire et historique. En option, une activité : sortie en bateau, kayak, quad, tour de Sandwich Harbour… (budget indicatif : 120 € par personne pour une journée d’activité). Repas à votre charge : nombreux restaurants et food trucks en ville.' },
+        a: 'Petit-déjeuner inclus, puis découverte de la ville balnéaire et historique. En option, une activité : sortie en bateau, kayak, quad, tour de Sandwich Harbour… (budget indicatif : 120 € par personne pour une journée d’activité). Repas à votre charge : nombreux restaurants et food trucks en ville.' },
       { j: 3, stop: 'okatare', via: 'uis', t: 'Traversée du Namib, arrivée à Okatare', nuit: 'Lodge', img: 'ferme-okatare',
         a: 'Petit-déjeuner inclus, puis départ pour la ferme Okatare à travers le désert du Namib et le Damaraland, via Uis. Repas et nuit sur place.' },
       { j: 4, stop: 'okatare', t: 'Découverte de la ferme Okatare', nuit: 'Lodge', img: 'koudou-coucher-soleil',
-        a: 'Découverte du territoire de la ferme en 4x4 avec chauffeur ou à pied : plus de 10 espèces d’antilopes, plus de 250 espèces d’oiseaux et une grande diversité de flore et de paysages. Guidage, repas et hébergement haut de gamme inclus.' },
+        a: 'Découverte du territoire de la ferme en 4x4 avec chauffeur ou à pied : plus de 10 espèces d’antilopes, plus de 250 espèces d’oiseaux et une grande diversité de flore et de paysages. Guidage, repas et hébergement haut de gamme inclus.' },
       { j: 5, stop: 'twyfelfontein', after: ['okatare'], t: 'Excursion dans le Damaraland', nuit: 'Lodge', img: 'paysage-damaraland',
         a: 'Petit-déjeuner à la ferme, puis excursion d’une journée dans le Damaraland jusqu’à Twyfelfontein. Découverte du site et balade sur place avec votre chauffeur en 4x4. Retour, repas et nuit à Okatare.' },
       { j: 6, stop: 'halali', t: 'Parc national d’Etosha', nuit: 'Bungalow', img: 'zebre-etosha',
@@ -327,7 +327,7 @@ window.IA_DATA.fiches = {
       { j: 8, stop: 'okatare', t: 'Retour à la ferme Okatare', nuit: 'Lodge',
         a: 'Après le petit-déjeuner, retour vers la ferme en traversant le parc national. Balade possible à pied ou en 4x4 sur la ferme. Repas et nuit sur place.' },
       { j: 9, stop: 'vingerklip', after: ['okatare'], t: 'Excursion au Fingerklip', nuit: 'Lodge',
-        a: 'Petit-déjeuner, puis excursion jusqu’au Fingerklip, dans le Damaraland : un site géologique particulier aux magnifiques paysages. Retour à la ferme, repas et nuit sur place.' },
+        a: 'Petit-déjeuner, puis excursion jusqu’au Fingerklip, dans le Damaraland : un site géologique particulier aux magnifiques paysages. Retour à la ferme, repas et nuit sur place.' },
       { j: 10, stop: 'windhoek', t: 'Retour à Windhoek', nuit: 'Vol retour',
         a: 'Petit-déjeuner, puis retour à Windhoek avec votre véhicule et votre chauffeur, et dépose à l’aéroport international pour votre vol retour.' }
     ],
@@ -344,9 +344,9 @@ window.IA_DATA.fiches = {
     regionsTitle: ['Quatre étapes,', 'un seul rythme'],
     regions: [
       ['Swakopmund', 'Ville balnéaire et historique sur la côte atlantique namibienne.', '22°41′S 14°32′E', 'otaries-cape-cross'],
-      ['Damaraland', 'Paysages arides et sites géologiques : Twyfelfontein, Fingerklip.', '20°36′S 14°22′E', 'paysage-damaraland'],
+      ['Damaraland', 'Paysages arides et sites géologiques : Twyfelfontein, Fingerklip.', '20°36′S 14°22′E', 'paysage-damaraland'],
       ['Ferme Okatare', 'Lodge privatif sur une ferme historique de 11 000 ha près de Khorixas, séjour tout compris.', 'Près de Khorixas', 'ferme-okatare'],
-      ['Etosha', 'Parc national, deux nuits en bungalow : Halali puis Okaukuejo.', '19°11′S 15°55′E', 'zebre-etosha']
+      ['Etosha', 'Parc national, deux nuits en bungalow : Halali puis Okaukuejo.', '19°11′S 15°55′E', 'zebre-etosha']
     ],
     assist: {
       img: 'koudou-coucher-soleil', imgAlt: 'Silhouette d’un koudou au coucher du soleil',
@@ -377,7 +377,7 @@ window.IA_DATA.fiches = {
       { j: 4, stop: 'swakopmund', t: 'Route vers Swakopmund', nuit: 'Guesthouse', km: 350, img: 'g-cote-brume-dunes-4x5',
         a: 'Départ pour la station balnéaire de Swakopmund en traversant le Naukluft (~350 km). Installation et visite de la ville. Nuit en guesthouse.' },
       { j: 5, stop: 'walvisbay', after: ['swakopmund'], t: 'Excursion à Walvis Bay', nuit: 'Guesthouse', km: 35, img: 'otaries-fourrure',
-        a: 'Excursion au choix à Walvis Bay (~35 km) : observation des otaries en kayak, visite de Sandwich Harbour en 4x4, ou pêche en bateau. Nuit à Swakopmund.' },
+        a: 'Excursion au choix à Walvis Bay (~35 km) : observation des otaries en kayak, visite de Sandwich Harbour en 4x4, ou pêche en bateau. Nuit à Swakopmund.' },
       { j: 6, stop: 'spitzkoppe', t: 'Le Spitzkoppe', nuit: 'Camping', km: 150, img: 'spitzkoppe',
         a: 'Départ pour le Spitzkoppe (~150 km) et ses paysages spectaculaires, en totale autonomie, sans réseau ni wifi. Randonnée à pied ou en 4x4 et coucher de soleil sur le site. Nuit en camping.' },
       { j: 7, stop: 'brandberg', t: 'Le Brandberg et la White Lady', nuit: 'Camping', km: 130, img: 'rocher-damaraland',
@@ -395,11 +395,11 @@ window.IA_DATA.fiches = {
       { j: 14, stop: 'rundu', t: 'Route vers la bande de Caprivi', nuit: 'Lodge', km: 430, img: 'mokoro-okavango',
         a: 'Route vers Rundu et la bande de Caprivi en fin de matinée (~430 km). Nuit en lodge à Tambuti.' },
       { j: 15, stop: 'mahango', t: 'Le parc du Mahangu', nuit: 'Camping', km: 230, img: 'hippopotames-okavango-2',
-        a: 'Départ pour le parc du Mahangu (~230 km) à la découverte de nouvelles espèces : crocodiles, hippopotames, buffles d’eau… Nuit en camping.' },
+        a: 'Départ pour le parc du Mahangu (~230 km) à la découverte de nouvelles espèces : crocodiles, hippopotames, buffles d’eau… Nuit en camping.' },
       { j: 16, stop: 'divundu', t: 'Les parcs Bwabwata et Mahangu', nuit: 'Camping', km: 90, img: 'elephants-buffalo',
         a: 'Journée découverte des parcs du Bwabwata et du Mahangu, avec pause déjeuner et piscine entre les deux parcs (~90 km). Nuit en camping.' },
       { j: 17, j2: 18, stop: 'guma', t: 'Guma Lagoon, au Botswana', nuit: 'Camping', km: 140, img: 'peche-traditionnelle',
-        a: 'Temps libre puis départ pour Guma Lagoon, avec passage de la frontière du Botswana (~140 km). Activités possibles : croisière au coucher du soleil, survol du delta en hélicoptère (non inclus). Nuit en camping.' },
+        a: 'Temps libre puis départ pour Guma Lagoon, avec passage de la frontière du Botswana (~140 km). Activités possibles : croisière au coucher du soleil, survol du delta en hélicoptère (non inclus). Nuit en camping.' },
       { j: 19, stop: 'dkar', t: 'Retour vers Dekar', nuit: 'Camping', km: 350, img: 'charrette-anes',
         a: 'Long trajet vers Dekar (~350 km) pour se rapprocher de la capitale namibienne, à travers les paysages désertiques. Nuit en camping.' },
       { j: 20, stop: 'gobabis', t: 'Étape à Gobabis', nuit: 'Lodge', km: 360,
@@ -407,13 +407,13 @@ window.IA_DATA.fiches = {
       { j: 21, stop: 'windhoek', t: 'Retour à Windhoek', nuit: 'Vol retour', km: 160,
         a: 'Départ pour l’aéroport de Windhoek (~160 km) et vol retour vers la France.' }
     ],
-    incl: ['La prise en charge à l’aéroport de Windhoek', 'Le véhicule 4x4 équipé et son assurance', 'Le carburant', 'L’intégralité des hébergements : camping, lodges et guest houses', 'Les entrées de parcs nationaux', 'L’accompagnateur francophone', 'Les petits-déjeuners et plusieurs repas en semi-autonomie ou au restaurant'],
+    incl: ['La prise en charge à l’aéroport de Windhoek', 'Le véhicule 4x4 équipé et son assurance', 'Le carburant', 'L’intégralité des hébergements : camping, lodges et guest houses', 'Les entrées de parcs nationaux', 'L’accompagnateur francophone', 'Les petits-déjeuners et plusieurs repas en semi-autonomie ou au restaurant'],
     nonIncl: ['Les vols internationaux', 'Le visa touristique', 'Les cartes SIM', 'Les boissons alcoolisées', 'Les repas non mentionnés au programme', 'Les activités optionnelles', 'Les pourboires'],
     focus: {
       eyebrow: 'Le véhicule', title: ['4x4 équipé', 'pour 5'], img: 'installation-camp', imgAlt: 'Voyageurs installant la tente de toit de leur 4x4',
       img2: 'bivouac-4x4-nuit', img2Alt: 'Bivouac de nuit autour du feu',
       kits: ['Tentes de toit', 'Frigo et congélateur', 'Cuisine pour 5', 'Kilométrage illimité'],
-      text: 'Un véhicule 4x4 équipé : tentes de toit, frigo et congélateur, matériel de camping et de cuisine pour 5 personnes, kilométrage illimité.'
+      text: 'Un véhicule 4x4 équipé : tentes de toit, frigo et congélateur, matériel de camping et de cuisine pour 5 personnes, kilométrage illimité.'
     },
     gallery: [['oryx-desert', 'Oryx sur la route'], ['charrette-anes', 'Charrette tirée par des ânes'], ['peche-traditionnelle', 'Pêche traditionnelle'], ['passereaux', 'Passereaux au point d’eau']],
     regionsTitle: ['Du Namib', 'au delta de l’Okavango'],
@@ -448,15 +448,15 @@ window.IA_DATA.fiches = {
       { j: 2, stop: 'windhoek', t: 'Arrivée à Windhoek', nuit: 'Urban Camp', img: 'g-route-acacias-aube-16x9',
         a: 'Arrivée à l’aéroport international de Windhoek, achat d’une carte SIM locale et change sur place. Courses pour les jours suivants, puis installation. Nuit à l’Urban Camp à Windhoek.' },
       { j: 3, stop: 'kalahari', t: 'Route vers le Kalahari', nuit: 'Lodge', km: 285, img: 'kalahari',
-        a: 'Direction le Kalahari (~285 km) par des routes aux paysages spectaculaires, avec possibilité d’observer quelques animaux du désert. Nuit en lodge au choix : Lapa Lange Game Lodge ou Gondwana Kalahari Anib Lodge, petit-déjeuner inclus.' },
+        a: 'Direction le Kalahari (~285 km) par des routes aux paysages spectaculaires, avec possibilité d’observer quelques animaux du désert. Nuit en lodge au choix : Lapa Lange Game Lodge ou Gondwana Kalahari Anib Lodge, petit-déjeuner inclus.' },
       { j: 4, j2: 5, stop: 'sesriem', after: ['sossusvlei', 'sesriem'], t: 'Le désert du Namib et Sesriem', nuit: 'Lodge', km: 280, img: 'sossusvlei',
-        a: 'Route vers l’Elegant Desert Lodge (~280 km), au plus près de l’entrée du parc de Sesriem. Après-midi de repos, puis réveil avant le lever du soleil pour une journée complète dans le parc : Deadvlei, Big Daddy, la dune 45… Nuits à l’Elegant Desert Lodge.' },
+        a: 'Route vers l’Elegant Desert Lodge (~280 km), au plus près de l’entrée du parc de Sesriem. Après-midi de repos, puis réveil avant le lever du soleil pour une journée complète dans le parc : Deadvlei, Big Daddy, la dune 45… Nuits à l’Elegant Desert Lodge.' },
       { j: 6, j2: 7, stop: 'swakopmund', after: ['walvisbay', 'swakopmund'], t: 'Swakopmund et Walvis Bay', nuit: 'Lodge', km: 400, img: 'otaries-fourrure',
-        a: 'Départ pour Swakopmund en traversant le Naukluft (~365 km), avec arrêt pour observer les welwitschia et la faune du désert, puis découverte de la ville et de son marché artisanal. Le lendemain, excursion à Walvis Bay (~35 km) au choix : kayak ou bateau avec les otaries, Sandwich Harbour en 4x4, ou quad sur les dunes. Nuits au Desert Breeze Lodge.' },
+        a: 'Départ pour Swakopmund en traversant le Naukluft (~365 km), avec arrêt pour observer les welwitschia et la faune du désert, puis découverte de la ville et de son marché artisanal. Le lendemain, excursion à Walvis Bay (~35 km) au choix : kayak ou bateau avec les otaries, Sandwich Harbour en 4x4, ou quad sur les dunes. Nuits au Desert Breeze Lodge.' },
       { j: 8, stop: 'brandberg', via: 'spitzkoppe', t: 'Le Spitzkoppe et le Brandberg', nuit: 'Camping', km: 280, img: 'spitzkoppe',
         a: 'Départ matinal pour le Spitzkoppe (~280 km), montagne de pierre culminant à 1784 mètres, puis route jusqu’au Brandberg, plus haut sommet de Namibie (2573 m). Nuit en camping au Madisa Camp, petite oasis au cœur du désert.' },
       { j: 9, j2: 10, stop: 'okatare', t: 'Pause à la ferme Okatare', nuit: 'Lodge', km: 100, img: 'ferme-okatare',
-        a: 'Route vers Okatare Farm (~100 km) pour deux jours de repos : faune de la ferme (gnous bleus, springboks, élans du Cap…), balade à cheval, piscine et jeux de société. Nuit en lodge privé, repas inclus.' },
+        a: 'Route vers Okatare Farm (~100 km) pour deux jours de repos : faune de la ferme (gnous bleus, springboks, élans du Cap…), balade à cheval, piscine et jeux de société. Nuit en lodge privé, repas inclus.' },
       { j: 11, j2: 12, stop: 'onguma', via: 'okaukuejo', t: 'Safari dans le parc d’Etosha', nuit: 'Camping', km: 190, img: 'impalas-face-noire',
         a: 'Départ matinal pour le parc national d’Etosha (~190 km) pour deux jours de safari en 4x4, à la recherche du Big Five, safari possible jusqu’au coucher du soleil. Nuits en camping à Etosha Village puis à Onguma Camp, avec possibilité de repas au barbecue.' },
       { j: 13, stop: 'waterberg', via: 'ccf', t: 'Cheetah Conservation et Waterberg', nuit: 'Camp', img: 'g-plateau-waterberg-4x5',
@@ -464,13 +464,13 @@ window.IA_DATA.fiches = {
       { j: 14, stop: 'windhoek', t: 'Retour à l’aéroport de Windhoek', nuit: 'Vol retour', km: 310,
         a: 'Départ pour l’aéroport selon les horaires de vol (~310 km), avec possibilité de passer par Windhoek pour les derniers achats. Restitution du véhicule, plein fait et propre, puis dépose à l’aéroport.' }
     ],
-    incl: ['La prise en charge à l’aéroport de Windhoek', 'Le véhicule 4x4 équipé et son assurance', 'Le carburant', 'L’intégralité des hébergements : camping, lodges et guest houses', 'Les entrées des parcs de Spitzkoppe, Waterberg, Sesriem et Etosha', 'L’accompagnateur francophone', '9 petits-déjeuners, 2 déjeuners et 5 dîners au restaurant ou en lodge'],
+    incl: ['La prise en charge à l’aéroport de Windhoek', 'Le véhicule 4x4 équipé et son assurance', 'Le carburant', 'L’intégralité des hébergements : camping, lodges et guest houses', 'Les entrées des parcs de Spitzkoppe, Waterberg, Sesriem et Etosha', 'L’accompagnateur francophone', '9 petits-déjeuners, 2 déjeuners et 5 dîners au restaurant ou en lodge'],
     nonIncl: ['Les vols internationaux', 'Le visa touristique', 'Les cartes SIM', 'Les boissons alcoolisées', 'Les repas non mentionnés au programme', 'Les activités optionnelles', 'Les pourboires'],
     focus: {
       eyebrow: 'Le véhicule', title: ['4x4 équipé', 'pour 5'], img: 'installation-camp', imgAlt: 'Voyageurs installant la tente de toit de leur 4x4',
       img2: 'bivouac-4x4-nuit', img2Alt: 'Bivouac de nuit autour du feu',
       kits: ['Tentes de toit', 'Frigo et congélateur', 'Cuisine pour 5', 'Kilométrage illimité'],
-      text: 'Un véhicule 4x4 équipé : tentes de toit, frigo et congélateur, matériel de camping et de cuisine pour 5 personnes, kilométrage illimité.'
+      text: 'Un véhicule 4x4 équipé : tentes de toit, frigo et congélateur, matériel de camping et de cuisine pour 5 personnes, kilométrage illimité.'
     },
     gallery: [['impalas-face-noire', 'Impalas à face noire'], ['spitzkoppe', 'Paysage du Spitzkoppe'], ['peuple-kalahari', 'Habitants du Kalahari'], ['kalahari', 'Kalahari']],
     regionsTitle: ['Cinq déserts', 'et une ferme'],
@@ -503,23 +503,23 @@ window.IA_DATA.fiches = {
       { j: 1, stop: 'sesriem', t: 'Arrivée à Windhoek, départ pour Sesriem', nuit: 'Lodge', km: 320, img: 'g-route-acacias-aube-16x9',
         a: 'Arrivée à Windhoek, prise en charge par l’accompagnateur, achat de cartes SIM et change à l’aéroport. Route vers Sesriem (~320 km) pour se rapprocher au maximum de Sossusvlei. Installation et nuit en lodge.' },
       { j: 2, stop: 'sossusvlei', after: ['sesriem'], t: 'Visite du parc de Sesriem', nuit: 'Lodge', km: 150, img: 'sossusvlei',
-        a: 'Direction Sesriem (~150 km) pour les paysages les plus connus du sud namibien : dune 45, Big Daddy, Sesriem Canyon et Sossusvlei. Retour en fin de journée au lodge.' },
+        a: 'Direction Sesriem (~150 km) pour les paysages les plus connus du sud namibien : dune 45, Big Daddy, Sesriem Canyon et Sossusvlei. Retour en fin de journée au lodge.' },
       { j: 3, stop: 'swakopmund', t: 'Route vers Swakopmund', nuit: 'Guesthouse', km: 365, img: 'g-cote-brume-dunes-4x5',
         a: 'Départ pour Swakopmund en traversant le Naukluft (~365 km), avec arrêts possibles pour observer la faune du désert et les welwitschia. Repos ou visite de la ville à l’arrivée. Nuit en guesthouse.' },
       { j: 4, stop: 'walvisbay', after: ['swakopmund'], t: 'Excursion à Walvis Bay', nuit: 'Guesthouse', km: 35, img: 'otaries-fourrure',
-        a: 'Excursion matinale à Walvis Bay (~35 km) au choix : otaries en kayak ou en bateau, et/ou Sandwich Harbour en 4x4. Retour en début d’après-midi, temps libre ensuite. Nuit à Swakopmund.' },
+        a: 'Excursion matinale à Walvis Bay (~35 km) au choix : otaries en kayak ou en bateau, et/ou Sandwich Harbour en 4x4. Retour en début d’après-midi, temps libre ensuite. Nuit à Swakopmund.' },
       { j: 5, stop: 'brandberg', via: 'spitzkoppe', t: 'Le Spitzkoppe et le Brandberg', nuit: 'Lodge', km: 280, img: 'spitzkoppe',
         a: 'Départ pour le Spitzkoppe (~150 km), montagne de pierre culminant à 1784 mètres, avec déjeuner sur place, puis route jusqu’au Brandberg, plus haut sommet de Namibie (2573 m, ~130 km). Installation dans un lodge avec piscine.' },
       { j: 6, stop: 'okatare', t: 'White Lady et ferme d’Okatare', nuit: 'Bungalow', km: 150, img: 'rocher-damaraland',
         a: 'Sentier de la White Lady au Brandberg pour observer des peintures rupestres, avant la chaleur. Puis route vers la ferme familiale d’Okatare (~150 km) pour deux nuits en bungalows privatifs haut de gamme, en all inclusive.' },
       { j: 7, stop: 'okatare', t: 'Journée libre à la ferme Okatare', nuit: 'Bungalow', img: 'ferme-okatare',
-        a: 'Journée libre dans ce cadre idyllique : sorties possibles sur la ferme pour observer la faune (gnous bleus, springboks, élans du Cap…), piscine et jeux de société, en all inclusive.' },
+        a: 'Journée libre dans ce cadre idyllique : sorties possibles sur la ferme pour observer la faune (gnous bleus, springboks, élans du Cap…), piscine et jeux de société, en all inclusive.' },
       { j: 8, j2: 9, stop: 'onguma', via: 'okaukuejo', t: 'Safari dans le parc d’Etosha', nuit: 'Camping', km: 200, img: 'zebres-point-eau',
         a: 'Départ matinal pour le parc national d’Etosha (~200 km) pour deux jours de safari en 4x4, à la recherche du Big Five, safari possible jusqu’au coucher du soleil. Nuits en camping à Okaukuejo puis à Onguma Camp, avec possibilité de repas au barbecue.' },
       { j: 10, stop: 'rundu', t: 'Route vers Rundu', nuit: 'Hôtel', km: 400, img: 'mokoro-okavango',
         a: 'Départ en fin de matinée pour le nord (~400 km), à la découverte d’un climat et de paysages très différents. Nuit en hôtel à Rundu.' },
       { j: 11, stop: 'mahango', t: 'Le parc du Mahango et le Buffalo', nuit: 'Lodge', km: 230, img: 'hippopotames-okavango-2',
-        a: 'Départ pour le parc du Mahango (~230 km), le long de l’Okavango jusqu’au parc national du Buffalo : crocodiles, hippopotames, buffles d’eau… Nuit en lodge, dîner inclus.' },
+        a: 'Départ pour le parc du Mahango (~230 km), le long de l’Okavango jusqu’au parc national du Buffalo : crocodiles, hippopotames, buffles d’eau… Nuit en lodge, dîner inclus.' },
       { j: 12, stop: 'mahango', t: 'Journée safari au Mahango', nuit: 'Camping', km: 6, img: 'elephants-buffalo',
         a: 'Départ très tôt pour le parc du Mahango (~6 km) dès son ouverture, safari aux aurores. Retour au lodge pour la vue et la piscine, avec possibilité de retourner dans l’un des deux parcs l’après-midi. Nuit en camping au bord de l’eau.' },
       { j: 13, stop: 'rundu', t: 'Living museum et route vers Tambuti', nuit: 'Lodge', km: 265,
@@ -533,13 +533,13 @@ window.IA_DATA.fiches = {
       { j: 17, stop: 'windhoek', via: 'okahandja', t: 'Retour à Windhoek', nuit: 'Vol retour', km: 330,
         a: 'Départ pour l’aéroport de Windhoek (~330 km), avec arrêt possible au marché artisanal d’Okahandja pour les derniers souvenirs. Vol retour vers la France.' }
     ],
-    incl: ['La prise en charge à l’aéroport de Windhoek', 'Le véhicule 4x4 équipé et son assurance', 'Le carburant', 'L’intégralité des hébergements : camping, lodges et guest houses', 'Les entrées de parcs nationaux et de la Cheetah Conservation', 'L’accompagnateur francophone', '9 petits-déjeuners, 2 déjeuners et 4 dîners au restaurant ou en lodge'],
+    incl: ['La prise en charge à l’aéroport de Windhoek', 'Le véhicule 4x4 équipé et son assurance', 'Le carburant', 'L’intégralité des hébergements : camping, lodges et guest houses', 'Les entrées de parcs nationaux et de la Cheetah Conservation', 'L’accompagnateur francophone', '9 petits-déjeuners, 2 déjeuners et 4 dîners au restaurant ou en lodge'],
     nonIncl: ['Les vols internationaux', 'Le visa touristique', 'Les cartes SIM', 'Les boissons alcoolisées', 'Les repas non mentionnés au programme', 'Les activités optionnelles', 'Les pourboires'],
     focus: {
       eyebrow: 'Le véhicule', title: ['4x4 équipé', 'pour 5'], img: 'installation-camp', imgAlt: 'Voyageurs installant la tente de toit de leur 4x4',
       img2: 'bivouac-4x4-nuit', img2Alt: 'Bivouac de nuit autour du feu',
       kits: ['Tentes de toit', 'Frigo et congélateur', 'Cuisine pour 5', 'Kilométrage illimité'],
-      text: 'Un véhicule 4x4 équipé : tentes de toit, frigo et congélateur, matériel de camping et de cuisine pour 5 personnes, kilométrage illimité.'
+      text: 'Un véhicule 4x4 équipé : tentes de toit, frigo et congélateur, matériel de camping et de cuisine pour 5 personnes, kilométrage illimité.'
     },
     gallery: [['zebre-etosha', 'Zèbre, Etosha'], ['bivouac-4x4-nuit', 'Campement nocturne'], ['dunes-namib', 'Dunes du Namib']],
     regionsTitle: ['Cinq régions,', 'l’essentiel du pays'],

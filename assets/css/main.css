@@ -12,6 +12,7 @@
   --sand: #EADBC4;
   --sand-lt: #F6EEE2;
   --ochre: #C4572A;
+  --ochre-btn: #A9471F;  /* même teinte, 5,1:1 avec le sable pour le texte des boutons */
   --ochre-dk: #96391A;
   --night: #12100E;
   --night-2: #1E1915;
@@ -122,7 +123,7 @@ p { margin: 0; text-wrap: pretty; }
 
 /* ---------- Boutons ---------- */
 .btn {
-  --b-bg: var(--ochre); --b-fg: var(--sand-lt); --b-bd: var(--ochre);
+  --b-bg: var(--ochre-btn); --b-fg: var(--sand-lt); --b-bd: var(--ochre-btn);
   position: relative; display: inline-flex; align-items: center; justify-content: center; gap: .6em;
   min-height: 50px; padding: 0 1.45em; border-radius: 999px;
   border: 1px solid var(--b-bd); background: var(--b-bg); color: var(--b-fg);
@@ -153,7 +154,7 @@ p { margin: 0; text-wrap: pretty; }
   border: 1px solid var(--line); font-size: .76rem; font-weight: 600; letter-spacing: .04em; white-space: nowrap;
 }
 .chip--fill { background: var(--fg); color: var(--bg); border-color: transparent; }
-.chip--accent { background: var(--accent); color: var(--sand-lt); border-color: transparent; }
+.chip--accent { background: var(--ochre-btn); color: var(--sand-lt); border-color: transparent; }
 .tag-demo { display: inline-block; font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: .25em .6em; border-radius: 4px; background: rgba(196, 87, 42, .12); color: var(--ochre-dk); }
 
 /* ---------- En-tête ---------- */
@@ -195,7 +196,7 @@ p { margin: 0; text-wrap: pretty; }
 .calm-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--sand-lt); }
 .calm-btn[aria-pressed="true"] svg { color: var(--sand-lt) !important; }
 .hd__burger { display: none; }
-.hd .btn--devis { --b-bg: var(--ochre); }
+.hd .btn--devis { --b-bg: var(--ochre-btn); }
 
 /* Menu mobile */
 .menu {
@@ -729,7 +730,8 @@ html.is-calm .signal span { animation: none; opacity: .25; transform: scale(1.4)
 .day__fig { margin: 4px 0 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 3px; }
 .day__fig img { width: 100%; height: 100%; object-fit: cover; }
 .day.is-on .day__n b { color: var(--accent); }
-html.js:not(.is-calm) .day:not(.is-on) { opacity: .72; }
+/* jours inactifs : le texte du programme reste lisible, seuls le numéro et l'illustration s'effacent */
+html.js:not(.is-calm) .day:not(.is-on) .day__n b, html.js:not(.is-calm) .day:not(.is-on) .day__fig { opacity: .6; }
 
 .incl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 36px); }
 .incl__col { display: grid; gap: 18px; align-content: start; padding: clamp(20px, 2.6vw, 36px); border-radius: 8px; background: color-mix(in srgb, var(--bg-2) 70%, transparent); }
@@ -978,7 +980,7 @@ body.menu-open .actionbar, html.devis-open .actionbar { transform: translateY(11
 .env-btn { position: relative; }
 .env-btn .env-count {
   position: absolute; right: -4px; top: -4px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px;
-  background: var(--ochre); color: var(--sand-lt); font-size: .66rem; font-weight: 700; line-height: 19px; text-align: center; font-variant-numeric: tabular-nums;
+  background: var(--ochre-btn); color: var(--sand-lt); font-size: .66rem; font-weight: 700; line-height: 19px; text-align: center; font-variant-numeric: tabular-nums;
 }
 .env-btn .env-count[hidden] { display: none; }
 .heart-spark { position: fixed; z-index: 140; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: #F08A6A; pointer-events: none; }
@@ -1131,7 +1133,7 @@ body.menu-open .actionbar, html.devis-open .actionbar { transform: translateY(11
 .stamp--done { position: relative; right: auto; bottom: auto; font-size: 1.15rem; padding: 12px 22px 10px; }
 .nexts { list-style: none; counter-reset: n; margin: 6px 0; padding: 0; display: grid; gap: 0; width: 100%; }
 .nexts li { counter-increment: n; display: grid; grid-template-columns: 34px minmax(0, 1fr); column-gap: 12px; padding: 12px 0; border-top: 1px solid rgba(42, 33, 27, .1); }
-.nexts li::before { content: counter(n); grid-row: span 2; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--ochre); color: var(--sand-lt); font-size: .8rem; font-weight: 700; }
+.nexts li::before { content: counter(n); grid-row: span 2; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--ochre-btn); color: var(--sand-lt); font-size: .8rem; font-weight: 700; }
 .nexts b { font-size: .94rem; }
 .nexts span { font-size: .84rem; color: var(--muted); }
 
@@ -1478,3 +1480,36 @@ html.is-calm .trip__fig::after, html.is-calm .split figure::after, html.is-calm 
 .trip__chips { z-index: 2; }
 .odo, .odo span, .odo i { font-size: inherit !important; color: inherit !important; font-family: inherit; }
 .price-big b .odo { line-height: 1; }
+
+/* ---------- Finitions (audit) ---------- */
+/* galerie « Nos voyages » : défilable à la souris et au doigt sans épinglage (mode calme, sans JS) */
+.trips__track { overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; }
+.trips__track > * { scroll-snap-align: start; }
+.trips.is-pinned .trips__track { overflow: visible; scroll-snap-type: none; }
+/* couches ouvertes : la page ne défile plus, même sans Lenis */
+html.verrou { overflow: hidden; }
+.menu { overscroll-behavior: contain; }
+/* filet du voile de sable entre les pages */
+html.veil-in .veil { animation: intro-safety 0s 3s forwards; }
+/* tri : 16 px pour éviter le zoom d'iOS */
+.sort select { font-size: max(16px, 1rem); }
+/* coordonnées devenues liens : même dessin */
+.ccard b a, .ft a.tel-link, .menu a.tel-link { color: inherit; text-decoration: none; }
+/* légendes au survol : visibles au toucher */
+@media (hover: none) { .insta a span { opacity: 1; transform: none; } }
+/* cibles tactiles : 44 px */
+@media (pointer: coarse) {
+  .btn--sm, .fbtn, .sort select, .copy-btn { min-height: 44px; }
+  .ft li a { display: inline-block; padding-block: 11px; }
+}
+/* contrastes selon l'heure simulée : petits textes en accent assombri, cartes « Sur demande » sans opacité */
+.region .coord { color: var(--accent-txt, var(--ochre-dk)); }
+.tag-demo { color: var(--accent-txt, var(--ochre-dk)); }
+.when__grid--ask .wcard { opacity: 1; }
+.when__grid--ask .wcard small { color: var(--muted); }
+/* lien d'évitement : visible quand il reçoit le focus */
+a.sr-only:focus-visible { position: fixed; left: 12px; top: 12px; z-index: 1000; width: auto; height: auto; margin: 0; padding: 10px 16px; overflow: visible; clip: auto; white-space: normal; background: var(--night); color: var(--sand-lt); border-radius: 6px; }
+/* contrastes : tampon « Complet » (3,2:1), kilomètres du programme (4,2:1), titre sur la bande sombre de Préparer (2,8:1) */
+.stamp { background: rgba(163, 68, 29, .94); }
+.chip--km { color: #82321A; }
+.prep--road h2 em { color: #F0A86E; }

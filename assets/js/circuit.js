@@ -63,7 +63,7 @@
     if (animate && IA.hasGSAP && !IA.calm && prev !== m) {
       gsap.fromTo($$('[data-driver], [data-periode]'), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.05 });
       $$('[data-mode-switch] [aria-pressed="true"] svg').forEach(function (s) { gsap.fromTo(s, { rotation: -120 }, { rotation: 0, duration: 0.9, ease: 'back.out(1.8)' }); });
-      IA.announce && IA.announce('Formule ' + LABEL[m] + ' : ' + IA.euro(c.prix) + ' par personne.');
+      IA.announce && IA.announce('Formule ' + LABEL[m] + ' : ' + IA.euro(c.prix) + ' par personne.');
     }
   }
 

@@ -38,7 +38,7 @@
     map.setStops(r.ids, null);
     if (W.gsap && !IA.calm) { var o = { p: 0 }; gsap.to(o, { p: 1, duration: 1.6, ease: 'power2.inOut', onUpdate: function () { r.progress(o.p); } }); }
     else r.progress(1);
-    live.textContent = 'En tête : ' + c.name + ' · ' + c.jours + ' jours · ' + IA.euro(c.prix);
+    live.textContent = 'En tête : ' + c.name + ' · ' + c.jours + ' jours · ' + IA.euro(c.prix);
   }
   function update() { var top = ranked()[0]; draw(top.c); }
 
@@ -55,11 +55,11 @@
 
   function reasonList(r) {
     var c = r.c, out = [];
-    out.push((r.sF === 1 ? '✓ ' : r.sF ? '≈ ' : '✗ ') + 'Formule : ' + FORM[c.formule]);
+    out.push((r.sF === 1 ? '✓ ' : r.sF ? '≈ ' : '✗ ') + 'Formule : ' + FORM[c.formule]);
     out.push((r.okD ? '✓ ' : '✗ ') + c.nuitsLabel);
     if (r.hit.length) out.push('✓ ' + r.hit.map(function (x) { return ENVIE[x]; }).join(', '));
     if (r.miss.length) out.push('✗ ' + r.miss.map(function (x) { return ENVIE[x]; }).join(', '));
-    if (c.statut === 'complet') out.push('Départ ' + c.departLabel + ' complet : demandez la prochaine date');
+    if (c.statut === 'complet') out.push('Départ ' + c.departLabel + ' complet : demandez la prochaine date');
     return out;
   }
   function renderResults() {

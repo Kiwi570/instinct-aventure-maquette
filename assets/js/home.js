@@ -120,6 +120,7 @@
     if (trips && track && hasG && !IA.calm) {
       var mm2 = gsap.matchMedia();
       mm2.add('(min-width: 1101px)', function () {
+        trips.classList.add('is-pinned');
         var dist = function () { return Math.max(0, track.scrollWidth - W.innerWidth); };
         var tween = gsap.to(track, { x: function () { return -dist(); }, ease: 'none',
           scrollTrigger: { trigger: trips, start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: 0.8, invalidateOnRefresh: true, anticipatePin: 1 } });
@@ -132,11 +133,12 @@
         });
         stamps.forEach(function (st) {
           gsap.set(st, { opacity: 0 });
-          ScrollTrigger.create({ trigger: st.closest('.trip'), containerAnimation: tween, start: 'left 70%', once: true, onEnter: function () { stampIn(st); } });
+          ScrollTrigger.create({ trigger: st.closest('.trip'), containerAnimation: tween, start: 'right 100%', once: true, onEnter: function () { stampIn(st); } });
         });
         $$('.trip', track).forEach(function (t) {
-          gsap.from(t, { y: 60, opacity: 0.2, ease: 'none', scrollTrigger: { trigger: t, containerAnimation: tween, start: 'left 100%', end: 'left 65%', scrub: true } });
+          gsap.from(t, { y: 60, opacity: 0.2, ease: 'none', scrollTrigger: { trigger: t, containerAnimation: tween, start: 'left 100%', end: 'right 100%', scrub: true } });
         });
+        return function () { trips.classList.remove('is-pinned'); };
       });
       mm2.add('(max-width: 1100px)', function () {
         if (!('IntersectionObserver' in W)) return;

@@ -41,7 +41,7 @@
         '<p><b class="num" style="color:var(--fg)">' + IA.euro(c.prix) + '</b> TTC par personne, base ' + c.base + ' personnes, hors vols</p></div>' +
         '<div class="depart__side">' + (c.statut === 'complet' ? '<span class="stamp">Complet</span>' : '') +
         '<span class="count">' + count + '</span>' +
-        '<a class="link-arrow" href="' + c.page + '" target="_blank" rel="noopener"><span>Programme jour par jour</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div></article>';
+        '<a class="link-arrow" href="' + c.page + '"><span>Programme jour par jour</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></a></div></article>';
     }
     box.innerHTML = up.map(card).join('') + (past.length ? '<h3 class="eyebrow" style="margin-top:28px">Départs passés</h3>' + past.map(card).join('') : '');
     if (IA.hasGSAP && !IA.calm) {
@@ -171,7 +171,7 @@
         if (b.checked && i < 0) { sel.push(id); if (sel.length > 2) sel.shift(); }
         if (!b.checked && i >= 0) sel.splice(i, 1);
         syncBar();
-        if (sel.length === 2) IA.toast && IA.toast('Deux voyages sélectionnés : cliquez sur Comparer.');
+        if (sel.length === 2) IA.toast && IA.toast('Deux voyages sélectionnés : cliquez sur Comparer.');
       });
     });
     function row(label, vals) { return '<tr><th scope="row">' + label + '</th>' + vals.map(function (v) { return '<td>' + v + '</td>'; }).join('') + '</tr>'; }
