@@ -103,7 +103,7 @@
         setDay(0);
         var mm = gsap.matchMedia();
         mm.add('(min-width: 1101px)', function () {
-          ScrollTrigger.create({ trigger: piste, start: 'top top', end: '+=260%', pin: true, scrub: 0.6, anticipatePin: 1,
+          ScrollTrigger.create({ trigger: piste, start: 'top top', end: '+=260%', pin: true, scrub: 0.6,
             onUpdate: function (s) { setDay(s.progress * days.length * 0.999); } });
         });
         mm.add('(max-width: 1100px)', function () {

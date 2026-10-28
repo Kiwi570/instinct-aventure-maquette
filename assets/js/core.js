@@ -100,6 +100,15 @@
   }
   W.addEventListener('scroll', function () { if (!ticking) { ticking = true; W.requestAnimationFrame(onScroll); } }, { passive: true });
   onScroll();
+  /* hauteurs réelles de l'en-tête et de la barre du bas, pour les sections qui tiennent dans l'écran */
+  var measureBars = function () {
+    if (hd) H.style.setProperty('--entete-h', hd.offsetHeight + 'px');
+    var ab = $('[data-actionbar]');
+    H.style.setProperty('--barres-h', (ab && getComputedStyle(ab).display !== 'none' ? ab.offsetHeight : 0) + 'px');
+  };
+  measureBars();
+  if ('ResizeObserver' in W) { var ro = new ResizeObserver(measureBars); if (hd) ro.observe(hd); if ($('[data-actionbar]')) ro.observe($('[data-actionbar]')); }
+  W.addEventListener('resize', measureBars);
   $$('[data-nav]').forEach(function (a) {
     var n = a.getAttribute('data-nav');
     if ((IA.page === 'voyages' && n === 'voyages') || (IA.page === 'circuit' && n === 'voyages') || (IA.page === 'preparer' && n === 'preparer')) a.setAttribute('aria-current', 'page');
@@ -149,7 +158,7 @@
   var bar = $('[data-actionbar]');
   if (bar) {
     var heroEl = $('[data-hero]'), nightEl = $('.nuit'), barState = { pastHero: false, night: false };
-    var setBar = function () { bar.classList.toggle('is-on', barState.pastHero && !barState.night && !D.body.classList.contains('menu-open')); };
+    var setBar = function () { bar.classList.toggle('is-on', IA.page !== 'introuvable' && barState.pastHero && !barState.night && !D.body.classList.contains('menu-open')); };
     if ('IntersectionObserver' in W) {
       if (heroEl) new IntersectionObserver(function (es) { barState.pastHero = !es[0].isIntersecting; setBar(); }, { rootMargin: '-40% 0px 0px 0px' }).observe(heroEl);
       else barState.pastHero = true;
