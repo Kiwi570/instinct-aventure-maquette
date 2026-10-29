@@ -735,6 +735,11 @@ img[src*="g-cote-brume-dunes-4x5"] { object-position: 50% 38%; }
 img[src*="g-bivouac-crepuscule-4x5"] { object-position: 50% 74%; }
 img[src*="g-piscine-savane-4x5"] { object-position: 50% 60%; }
 img[src*="g-carnet-boussole-4x5"] { object-position: 50% 8%; }
+/* étape bivouac sur téléphone : cadre 4:3 pour garder la tente de toit, le 4x4 et le feu */
+@media (max-width: 640px) {
+  .day__fig:has(img[src*="g-bivouac-crepuscule-4x5"]) { aspect-ratio: 4 / 3; }
+  .day__fig img[src*="g-bivouac-crepuscule-4x5"] { object-position: 50% 70%; }
+}
 .day.is-on .day__n b { color: var(--accent); }
 /* jours inactifs : le texte du programme reste lisible, seuls le numéro et l'illustration s'effacent */
 html.js:not(.is-calm) .day:not(.is-on) .day__n b, html.js:not(.is-calm) .day:not(.is-on) .day__fig { opacity: .6; }
