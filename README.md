@@ -21,7 +21,7 @@ Maquette statique (HTML, CSS, JavaScript), sans étape de construction, prête p
 ## Où modifier
 - **Circuits, prix, départs, programme jour par jour** : `assets/js/data.js` (un seul fichier). Les départs confirmés sont triés automatiquement entre « à venir » et « passés ».
 - **Styles** : `assets/css/main.css` (couleurs et typographies en tête de fichier).
-- **Images** : `assets/img/<nom>-640|1280|1920|2560.webp` (et `.avif`). Les fichiers `g-*.webp` sont des visuels provisoires, à remplacer par les images Grok.
+- **Images** : `assets/img/<nom>-640|1280|1920|2560.webp` (et `.avif`). Les fichiers `g-*` sont les visuels Grok définitifs ; leur source fait 1168 px de grand côté, donc la plus grande déclinaison est limitée à 1,5 fois : 1176 × 1470 (4:5), 1744 × 981 (16:9), 981 × 1744 (9:16), avec le vrai `w` dans les srcset.
 - **Informations pratiques** (`preparer.html`) : vérifiées le 19 octobre 2026 auprès de France Diplomatie, de l’Institut Pasteur, de TourMaG et du Routard ; à revérifier avant chaque saison.
 
 ## Bibliothèques hébergées avec le site
