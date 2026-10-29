@@ -121,8 +121,10 @@
     var prog = { L: 0, km: 0 }, cur = -1, total = days[days.length - 1].j2 || days[days.length - 1].j;
     var kmAt = []; var acc = 0; days.forEach(function (d) { acc += d.km || 0; kmAt.push(acc); });
     /* la carte collante ne doit jamais recouvrir les images des étapes. Sa hauteur réelle est mesurée (--carte-h) ;
-       jusqu'à 1023 px de large, ou dès qu'elle dépasse 30 % de la hauteur de l'écran, elle reste dans le flux et
-       l'avancement (jour, nuit) passe dans une barre d'une ligne accrochée sous la sous-navigation. */
+       jusqu'à 1023 px de large, ou quand la page est sur une colonne et que la carte dépasse 30 % de la hauteur
+       de l'écran, elle reste dans le flux et l'avancement (jour, nuit) passe dans une barre d'une ligne accrochée
+       sous la sous-navigation. Une colonne : lu dans la grille calculée de .days (main.css, palier 1100 px),
+       pour ne pas recopier le point de rupture. */
     var daysBox = $('.days'), mapBox = $('.days__map'), hud = $('.days__hud'), sub = $('[data-subnav]'), list = $('.days__list');
     if (daysBox && mapBox && hud && sub && list) {
       var narrow = W.matchMedia('(max-width: 1023px)'), root = document.documentElement, live = IA.hasGSAP && !IA.calm;
@@ -139,7 +141,8 @@
         hud.classList.toggle('is-visible', live && r.top < top && r.bottom > top + hud.offsetHeight);
       };
       var measureCarte = function () {
-        var h = mapBox.offsetHeight, on = narrow.matches || h > W.innerHeight * 0.3;
+        var h = mapBox.offsetHeight, oneCol = getComputedStyle(daysBox).gridTemplateColumns.trim().split(/\s+/).length === 1,
+          on = narrow.matches || (oneCol && h > W.innerHeight * 0.3);
         compact(on);
         root.style.setProperty('--carte-h', (on ? hud.offsetHeight : h) + 'px');
         root.style.setProperty('--sousnav-h', sub.offsetHeight + 'px');

@@ -1559,7 +1559,7 @@ a.sr-only:focus-visible { position: fixed; left: 12px; top: 12px; z-index: 1000;
   .days__map .map { flex: 0 1 auto; min-height: 0; }
   .days__map .map-note { flex: none; margin-block: 10px 16px; }
 }
-/* fiches : jusqu'à 1023 px, ou quand la carte dépasse 30 % de l'écran (mesure dans circuit.js), elle reste dans le flux
+/* fiches : jusqu'à 1023 px, ou sur une colonne quand la carte dépasse 30 % de l'écran (mesure dans circuit.js), elle reste dans le flux
    et ne recouvre jamais les images ; l'avancement passe dans une barre d'une ligne sous la sous-navigation */
 .days--compacte .days__map { position: static; }
 .subnav .days__hud {
