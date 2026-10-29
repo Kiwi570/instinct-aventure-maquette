@@ -729,6 +729,12 @@ html.is-calm .signal span { animation: none; opacity: .25; transform: scale(1.4)
 .day__meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
 .day__fig { margin: 4px 0 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 3px; }
 .day__fig img { width: 100%; height: 100%; object-fit: cover; }
+/* Visuels Grok 4:5 dans des cadres plus larges : cadrage sur le sujet */
+img[src*="g-plateau-waterberg-4x5"] { object-position: 50% 36%; }
+img[src*="g-cote-brume-dunes-4x5"] { object-position: 50% 38%; }
+img[src*="g-bivouac-crepuscule-4x5"] { object-position: 50% 74%; }
+img[src*="g-piscine-savane-4x5"] { object-position: 50% 60%; }
+img[src*="g-carnet-boussole-4x5"] { object-position: 50% 8%; }
 .day.is-on .day__n b { color: var(--accent); }
 /* jours inactifs : le texte du programme reste lisible, seuls le numéro et l'illustration s'effacent */
 html.js:not(.is-calm) .day:not(.is-on) .day__n b, html.js:not(.is-calm) .day:not(.is-on) .day__fig { opacity: .6; }
