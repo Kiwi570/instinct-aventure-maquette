@@ -1559,21 +1559,19 @@ a.sr-only:focus-visible { position: fixed; left: 12px; top: 12px; z-index: 1000;
   .days__map .map { flex: 0 1 auto; min-height: 0; }
   .days__map .map-note { flex: none; margin-block: 10px 16px; }
 }
-/* fiches sur téléphone : quand la carte dépasse 30 % de l'écran (mesure dans circuit.js), elle reste dans le flux
+/* fiches : jusqu'à 1023 px, ou quand la carte dépasse 30 % de l'écran (mesure dans circuit.js), elle reste dans le flux
    et ne recouvre jamais les images ; l'avancement passe dans une barre d'une ligne sous la sous-navigation */
 .days--compacte .days__map { position: static; }
 .subnav .days__hud {
   position: absolute; left: 0; right: 0; top: 100%; display: flex; justify-content: space-between; gap: 10px;
-  padding: 6px max(var(--pad-x), env(safe-area-inset-right, 0px)) 6px max(var(--pad-x), env(safe-area-inset-left, 0px));
+  padding: 6px max(var(--pad-x), env(safe-area-inset-right, 0px), calc((100% - var(--wrap)) / 2)) 6px max(var(--pad-x), env(safe-area-inset-left, 0px), calc((100% - var(--wrap)) / 2));
   background: var(--bg); border-bottom: 1px solid var(--line); opacity: 0; visibility: hidden; transform: translateY(-6px);
   transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
 }
 .subnav .days__hud.is-visible { opacity: 1; visibility: visible; transform: none; }
 .subnav .days__hud span { white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; padding-inline: 10px; }
 .subnav .days__hud span:first-child { flex: none; }
-@media (max-width: 640px) {
-  .day { scroll-margin-top: calc(var(--entete-h, var(--hd-h)) + var(--sousnav-h, 0px) + var(--carte-h, 0px)); }
-}
+.days--compacte .day { scroll-margin-top: calc(var(--entete-h, var(--hd-h)) + var(--sousnav-h, 0px) + var(--carte-h, 0px)); }
 /* catalogue sur téléphone : les filtres restent dans le flux au lieu de manger l'écran */
 @media (max-width: 900px) {
   .filters { position: static; }
