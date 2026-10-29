@@ -120,6 +120,37 @@
     var items = $$('.day');
     var prog = { L: 0, km: 0 }, cur = -1, total = days[days.length - 1].j2 || days[days.length - 1].j;
     var kmAt = []; var acc = 0; days.forEach(function (d) { acc += d.km || 0; kmAt.push(acc); });
+    /* téléphone : la carte collante ne doit jamais recouvrir les images des étapes. Sa hauteur réelle est mesurée
+       (--carte-h) ; si elle dépasse 30 % de l'écran, elle reste dans le flux et l'avancement (jour, nuit) passe
+       dans une barre d'une ligne accrochée sous la sous-navigation, visible pendant la liste des étapes. */
+    var daysBox = $('.days'), mapBox = $('.days__map'), hud = $('.days__hud'), sub = $('[data-subnav]'), list = $('.days__list');
+    if (daysBox && mapBox && hud && sub && list) {
+      var phone = W.matchMedia('(max-width: 640px)'), root = document.documentElement, live = IA.hasGSAP && !IA.calm;
+      var hudHome = hud.parentNode, hudNext = hud.nextSibling, barTick = false;
+      var compact = function (on) {
+        if (on === daysBox.classList.contains('days--compacte')) return;
+        daysBox.classList.toggle('days--compacte', on);
+        if (on) sub.appendChild(hud); else { hud.classList.remove('is-visible'); hudHome.insertBefore(hud, hudNext); }
+      };
+      var showBar = function () {
+        barTick = false;
+        if (!daysBox.classList.contains('days--compacte')) return;
+        var top = sub.getBoundingClientRect().bottom, r = list.getBoundingClientRect();
+        hud.classList.toggle('is-visible', live && r.top < top && r.bottom > top + hud.offsetHeight);
+      };
+      var measureCarte = function () {
+        var h = mapBox.offsetHeight, on = phone.matches && h > W.innerHeight * 0.3;
+        compact(on);
+        root.style.setProperty('--carte-h', (on ? hud.offsetHeight : h) + 'px');
+        root.style.setProperty('--sousnav-h', sub.offsetHeight + 'px');
+        showBar();
+      };
+      measureCarte();
+      if ('ResizeObserver' in W) { var roCarte = new ResizeObserver(measureCarte); roCarte.observe(mapBox); roCarte.observe(hud); roCarte.observe(sub); }
+      W.addEventListener('resize', measureCarte);
+      if (phone.addEventListener) phone.addEventListener('change', measureCarte);
+      W.addEventListener('scroll', function () { if (!barTick) { barTick = true; W.requestAnimationFrame(showBar); } }, { passive: true });
+    }
     function go(i) {
       if (i === cur) return; cur = i;
       items.forEach(function (it, j) { it.classList.toggle('is-on', j === i); });
